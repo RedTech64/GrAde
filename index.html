@@ -1,20 +1,4 @@
 <!doctype html>
-<!--
-  Material Design Lite
-  Copyright 2015 Google Inc. All rights reserved.
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-      https://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License
--->
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -48,6 +32,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-light_blue.min.css">
     <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src="code.js"></script>
     <style>
     #view-source {
       position: fixed;
@@ -87,89 +72,58 @@
       </header>
       <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
         <header class="demo-drawer-header">
-          <img src="images/user.jpg" class="demo-avatar">
+          <span class="mdl-typography--display-3">GrAde</span>
           <div class="demo-avatar-dropdown">
-            <span>hello@example.com</span>
             <div class="mdl-layout-spacer"></div>
-            <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
-              <i class="material-icons" role="presentation">arrow_drop_down</i>
-              <span class="visuallyhidden">Accounts</span>
-            </button>
-            <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
-              <li class="mdl-menu__item">hello@example.com</li>
-              <li class="mdl-menu__item">info@example.com</li>
-              <li class="mdl-menu__item"><i class="material-icons">add</i>Add another account...</li>
-            </ul>
           </div>
         </header>
         <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
-          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>Home</a>
+          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">grade</i>Home</a>
           <div class="mdl-layout-spacer"></div>
           <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i><span class="visuallyhidden">Help</span></a>
         </nav>
       </div>
       <main class="mdl-layout__content mdl-color--grey-100">
-        <div class="mdl-grid demo-content">
-          <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
-            <form action="#">
-			  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-				<input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="grade" onkeypress="handle(event)">
-				<label class="mdl-textfield__label" for="grade">Grade</label>
-				<span class="mdl-textfield__error">Input is not a number!</span>
-			  </div>
-			</form>
-			<div id="chips">
-			<script>
-				function handle(e){
-					if(e.keyCode === 13){
-						e.preventDefault();
-						new Chip(document.getElementById("grade").value);
-						if(document.getElementById("autoclear").checked) {
-							document.getElementById("grade").value = "";
-						}
-					}
-					
-					
-				}
-				var count = 0;
-				var list = [];
-				function Chip(grade) {
-						document.getElementById("chips").innerHTML = document.getElementById("chips").innerHTML + "<span class=\"mdl-chip mdl-chip--deletable\" id=\"" + "chip" + count + "\"><span class=\"mdl-chip__text\">" + grade + "</span><button type=\"button\" class=\"mdl-chip__action\" id=\"" + "delete" + count + "\" onclick=\"remove(this.id)\"><i class=\"material-icons\">cancel</i></button></span>";
-						list[count] = parseInt(grade);
-						count++;
-						update();
-					}
-				
-				function remove(id) {
-					list[parseInt(id.substring(6))] = null;
-					var c = document.getElementById(chips)
-					chips.removeChild(document.getElementById(document.getElementById(id).parentNode.id));
-					update();
-				}
-				
-				function update() {
-					var sum = 0;
-					var num = 0;
-					for(i = 0; i < list.length; i++) {
-						if(list[i] != null) {
-							sum += parseInt(list[i]);
-							num++;
-						}	
-					}
-					sum /= num;
-					document.getElementById("average").innerHTML = sum;
-					sum = 0;
-				}
-			</script>
-          </div>
-		  <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="autoclear">
-			<input type="checkbox" id="autoclear" class="mdl-checkbox__input" checked>
-			<span class="mdl-checkbox__label">Auto Clear</span>
-		  </label>
-		  <p id="average" font-family="Roboto" font-size="20">0</p>
+        <section class="section--center mdl-grid">
+            <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--1-col mdl-grid--no-spacing">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Grade</h2>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                    <h2 id=average class="mdl-card__title-text">0%</h2>
+                </div>
             </div>
+            
+          <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--2-col mdl-grid--no-spacing">
+              <div class="mdl-card__actions">
+                  <form action="#">
+                      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                          <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="grade" onkeypress="handle(event)">
+				          <label class="mdl-textfield__label" for="grade">Grade</label>
+				          <span class="mdl-textfield__error">Input is not a number!</span>
+			          </div>
+			      </form>
+              </div>
+                  <div class="mdl-card__actions mdl-card--border">
+                      <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="autoclear">
+                      <input type="checkbox" id="autoclear" class="mdl-checkbox__input" checked>
+                         <span class="mdl-checkbox__label">Auto Clear</span>
+                      </label>
+                  </div>
+              </div>
+            <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-grid--no-spacing">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Grades</h2>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                    <div id=chips>No grades entered</div>
+                </div>
           </div>
-        </div>
+        </section>
+          <section class="section--center mdl-grid">
+            
+          </section>
+        
       </main>
     </div>
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" style="position: fixed; left: -1000px; height: -1000px;">
