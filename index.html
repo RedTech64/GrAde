@@ -7,20 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <title>GrAde</title>
 
-    <!-- Add to homescreen for Chrome on Android -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <link rel="icon" sizes="192x192" href="images/android-desktop.png">
-
-    <!-- Add to homescreen for Safari on iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Material Design Lite">
-    <link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">
-
-    <!-- Tile icon for Win8 (144x144 + tile color) -->
-    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
-    <meta name="msapplication-TileColor" content="#3372DF">
-
     <link rel="shortcut icon" href="images/favicon.png">
 
     <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
@@ -32,7 +18,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-light_blue.min.css">
     <link rel="stylesheet" href="styles.css">
-    <script type="text/javascript" src="code.js"></script>
+    <script type="text/javascript" src="average.js"></script>
+    <script type="text/javascript" src="gpa.js"></script>
     <style>
     #view-source {
       position: fixed;
@@ -45,9 +32,9 @@
     }
     </style>
   </head>
-  <body>
-    <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
-      <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
+  <body onload="onload()">
+    <div class="layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+      <header class="header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
         <div class="mdl-layout__header-row">
           <span class="mdl-layout-title">Home</span>
           <div class="mdl-layout-spacer"></div>
@@ -70,14 +57,14 @@
           </ul>
         </div>
       </header>
-      <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
-        <header class="demo-drawer-header">
+      <div class="drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+        <header class="drawer-header">
           <span class="mdl-typography--display-3">GrAde</span>
-          <div class="demo-avatar-dropdown">
+          <div class="avatar-dropdown">
             <div class="mdl-layout-spacer"></div>
           </div>
         </header>
-        <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
+        <nav class="navigation mdl-navigation mdl-color--blue-grey-800">
           <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">grade</i>Home</a>
           <div class="mdl-layout-spacer"></div>
           <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i><span class="visuallyhidden">Help</span></a>
@@ -85,23 +72,29 @@
       </div>
       <main class="mdl-layout__content mdl-color--grey-100">
         <section class="section--center mdl-grid">
-            <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--1-col mdl-grid--no-spacing">
-                <div class="mdl-card__title">
+            <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--3-col mdl-grid--no-spacing">
+                <div class="center mdl-card__title">
                     <h2 class="mdl-card__title-text">Grade</h2>
                 </div>
                 <div class="mdl-card__actions mdl-card--border">
-                    <h2 id=average class="mdl-card__title-text">0%</h2>
+                    <h2 id=average class="display">0%</h2>
                 </div>
             </div>
             
-          <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--2-col mdl-grid--no-spacing">
-              <div class="mdl-card__actions">
+          <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--3-col mdl-grid--no-spacing">
+              <div class="center mdl-card__title">
+                    <h2 class="mdl-card__title-text">Input</h2>
+                </div>
+              <div class="mdl-card__actions mdl-card--border">
                   <form action="#">
-                      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                      <div class="gradetext mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                           <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="grade" onkeypress="handle(event)">
 				          <label class="mdl-textfield__label" for="grade">Grade</label>
 				          <span class="mdl-textfield__error">Input is not a number!</span>
 			          </div>
+                      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="addchip()" id="addButton">
+                          Add
+                      </button>
 			      </form>
               </div>
                   <div class="mdl-card__actions mdl-card--border">
@@ -109,20 +102,71 @@
                       <input type="checkbox" id="autoclear" class="mdl-checkbox__input" checked>
                          <span class="mdl-checkbox__label">Auto Clear</span>
                       </label>
+                      <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="decimal">
+                      <input type="checkbox" id="decimal" class="mdl-checkbox__input" onchange="update()">
+                         <span class="mdl-checkbox__label">Decimal</span>
+                      </label>
                   </div>
               </div>
-            <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-grid--no-spacing">
-                <div class="mdl-card__title">
+            <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-grid--no-spacing">
+                <div class="center mdl-card__title">
                     <h2 class="mdl-card__title-text">Grades</h2>
                 </div>
-                <div class="mdl-card__actions mdl-card--border">
+                <div class="center mdl-card__actions mdl-card--border">
                     <div id=chips>No grades entered</div>
                 </div>
           </div>
         </section>
-          <section class="section--center mdl-grid">
-            
-          </section>
+        <section class="section--center mdl-grid">
+            <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--3-col mdl-grid--no-spacing">
+                <div class="center mdl-card__title">
+                    <h2 class="mdl-card__title-text">GPA</h2>
+                </div>
+                <div class="center mdl-card__actions mdl-card--border">
+                    <h2 id=gpa class="display">0%</h2>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="classupdate()">
+                      Calculate
+                    </button>
+                </div>
+            </div>
+            <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--9-col mdl-grid--no-spacing">
+                <div class="center buttoncard mdl-card__title">
+                    <h2 class="mdl-card__title-text">Classes</h2>
+                    <button class="classadd mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" onclick="addclass()">
+                        <i class="material-icons">add</i>
+                    </button>
+                </div>
+                <div id="classes" class="center mdl-card__actions mdl-card--border">
+                  <form id="class0" action="#">
+                      <div class="classname mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="classname0">
+                        <label class="mdl-textfield__label" for="classname0">Class Name</label>
+                      </div>
+                      <div class="number mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                          <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classgrade0">
+                          <label class="mdl-textfield__label" for="classgrade0">Grade</label>
+                        <span class="mdl-textfield__error">Input is not a number!</span>
+                      </div>
+                      <div class="number mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                          <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classqp0">
+                          <label class="mdl-textfield__label" for="classqp0">QP</label>
+                        <span class="mdl-textfield__error">Input is not a number!</span>
+                      </div>
+                      <div class="mdl-tooltip" for="classqp0">
+                          Quality Points<br>Points added to grade for GPA
+                      </div>
+                      <button id="classmenu0" class="mdl-button mdl-js-button mdl-button--icon">
+                      <i class="material-icons">more_vert</i>
+                      </button>
+
+                      <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="classmenu0">
+                          <li class="mdl-menu__item" id="classdelete0" onclick="removeclass(this.id)">Delete</li>
+                          <li class="mdl-menu__item" id="classduplicate0" onclick="duplicate(this.id)">Duplicate</li>
+                      </ul>
+                    </form>
+                </div>
+            </div>
+        </section>
         
       </main>
     </div>

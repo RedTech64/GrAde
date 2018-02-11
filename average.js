@@ -1,10 +1,7 @@
 function handle(e){
     if(e.keyCode === 13){
         e.preventDefault();
-        new Chip(document.getElementById("grade").value);
-        if(document.getElementById("autoclear").checked) {
-            document.getElementById("grade").value = "";
-        }
+        addchip();
     }
 
 
@@ -14,7 +11,7 @@ var list = [];
 function Chip(grade) {
     if(document.getElementById("chips").innerHTML == "No grades entered")
         document.getElementById("chips").innerHTML = "";
-    document.getElementById("chips").innerHTML = document.getElementById("chips").innerHTML + "<span class=\"mdl-chip mdl-chip--deletable\" id=\"" + "chip" + count + "\"><span class=\"mdl-chip__text\">" + grade + "</span><button type=\"button\" class=\"mdl-chip__action\" id=\"" + "delete" + count + "\" onclick=\"remove(this.id)\"><i class=\"material-icons\">cancel</i></button></span>";
+    document.getElementById("chips").innerHTML = document.getElementById("chips").innerHTML + "<span class=\"pad mdl-chip mdl-chip--deletable\" id=\"" + "chip" + count + "\"><span class=\"mdl-chip__text\">" + grade + "</span><button type=\"button\" class=\"mdl-chip__action\" id=\"" + "delete" + count + "\" onclick=\"remove(this.id)\"><i class=\"material-icons\">cancel</i></button></span>";
         list[count] = parseInt(grade);
         count++;
         update();
@@ -40,9 +37,20 @@ function update() {
         }	
     }
     sum /= num;
+    if(document.getElementById("decimal").checked)
+        sum = sum.toFixed(2);
+    else
+        sum = sum.toFixed(0);
     if(num == 0)
         document.getElementById("average").innerHTML = "0%";
     else
-    document.getElementById("average").innerHTML = sum+"%";
+        document.getElementById("average").innerHTML = sum+"%";
     sum = 0;
+}
+
+function addchip() {
+   if(!document.getElementById("grade").value == "")
+        new Chip(document.getElementById("grade").value);
+    if(document.getElementById("autoclear").checked)
+        document.getElementById("grade").value = "";
 }
