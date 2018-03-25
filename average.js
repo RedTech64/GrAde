@@ -1,10 +1,8 @@
-function handle(e){
+function handle(e) {
     if(e.keyCode === 13){
         e.preventDefault();
         addchip();
     }
-
-
 }
 var count = 0;
 var list = [];
