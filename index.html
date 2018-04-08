@@ -33,8 +33,6 @@
       z-index: 900;
     }
     </style>
-    <div id="firebaseui-auth-container"></div>
-    <div id="loader">Loading...</div>
   </head>
   <body onload="onload()">
     <div class="layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
@@ -42,7 +40,7 @@
         <div class="mdl-layout__header-row">
           <span class="mdl-layout-title">Home</span>
           <div class="mdl-layout-spacer"></div>
-          <button class="mdl-button mdl-js-button mdl-button--primary" onclick="signin()">
+          <button id="auth" class="mdl-button mdl-js-button mdl-button--primary" onclick="auth()">
             Sign In
           </button>
           <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
