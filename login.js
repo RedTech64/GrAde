@@ -17,6 +17,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         if(!user.isAnonymous)
             document.getElementById("auth").innerHTML = "Sign Out";
         setUpData().then(function() {
+            initialize();
         });
     } else {
         console.log("User signed out");
