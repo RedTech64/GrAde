@@ -1,7 +1,7 @@
 var grades = [0];
 
-function initialize() {
-    loadData().then(function() {
+function initializeAverage() {
+    loadGrades().then(function() {
         updateChips();
         update();
     });
@@ -25,7 +25,7 @@ function remove(id) {
     grades[0]--;
     updateChips();
     update();
-    uploadData();
+    uploadGrades();
     }
 
 function update() {
@@ -66,22 +66,26 @@ function addChip() {
         grades[grades[0]+1] = parseInt(document.getElementById("grade").value);
         grades[0]++;
         update();
-        uploadData();
+        uploadGrades();
     }
     if(document.getElementById("autoclear").checked)
         document.getElementById("grade").value = "";
 }
 
-function uploadData() {
+function uploadGrades() {
     var db = firebase.firestore();
     return db.collection("users").doc(getUser().uid).update({
         grades: grades
+    }).then().catch(function(error) {
+        console.log(error);
     });
 }
 
-function loadData() {
-        var db = firebase.firestore();
-        return db.collection("users").doc(getUser().uid).get().then(function(doc) {
+function loadGrades() {
+    var db = firebase.firestore();
+    return db.collection("users").doc(getUser().uid).get().then(function(doc) {
         grades = doc.data().grades;
-        });
+    }).then().catch(function(error) {
+        console.log(error);
+    });
 }

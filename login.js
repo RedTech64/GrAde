@@ -17,7 +17,8 @@ firebase.auth().onAuthStateChanged(function(user) {
         if(!user.isAnonymous)
             document.getElementById("auth").innerHTML = "Sign Out";
         setUpData().then(function() {
-            initialize();
+            initializeAverage();
+            initializeGPA();
         });
     } else {
         console.log("User signed out");
@@ -48,7 +49,7 @@ function signOutGoogle() {
 function auth() {
     var user = getUser();
     if(user == undefined || user.isAnonymous) {
-        deleteUser().then(deleteData()).then(deleteUser()).then(signInGoogle());
+        deleteData().then(deleteUser()).then(signInGoogle());
     } else {
         signOutGoogle();
     }
@@ -61,7 +62,8 @@ function setUpData() {
             users.doc(user.uid).set({
                 name: user.displayName,
                 email: user.email,
-                grades: [0]
+                grades: [0],
+                classes: []
             });
         }
     }).catch(function(error) {
