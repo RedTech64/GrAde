@@ -9,10 +9,9 @@
 
     <link rel="shortcut icon" href="images/favicon.png">
 
-    <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
-    <!--
-    <link rel="canonical" href="http://www.example.com/">
-    -->
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase-firestore.js"></script>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -20,6 +19,7 @@
     <link rel="stylesheet" href="styles.css">
     <script type="text/javascript" src="average.js"></script>
     <script type="text/javascript" src="gpa.js"></script>
+    <script type="text/javascript" src="login.js"></script>
     <style>
     #view-source {
       position: fixed;
@@ -38,15 +38,9 @@
         <div class="mdl-layout__header-row">
           <span class="mdl-layout-title">Home</span>
           <div class="mdl-layout-spacer"></div>
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
-            <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
-              <i class="material-icons">search</i>
-            </label>
-            <div class="mdl-textfield__expandable-holder">
-              <input class="mdl-textfield__input" type="text" id="search">
-              <label class="mdl-textfield__label" for="search">Enter your query...</label>
-            </div>
-          </div>
+          <button id="auth" class="mdl-button mdl-js-button mdl-button--primary" onclick="auth()">
+            Sign In
+          </button>
           <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
             <i class="material-icons">more_vert</i>
           </button>
@@ -92,7 +86,7 @@
 				          <label class="mdl-textfield__label" for="grade">Grade</label>
 				          <span class="mdl-textfield__error">Input is not a number!</span>
 			          </div>
-                      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="addchip()" id="addButton">
+                      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="addChip()" id="addButton">
                           Add
                       </button>
 			      </form>
@@ -124,31 +118,28 @@
                 </div>
                 <div class="center mdl-card__actions mdl-card--border">
                     <h2 id=gpa class="display">0%</h2>
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="classupdate()">
-                      Calculate
-                    </button>
                 </div>
             </div>
             <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--9-col mdl-grid--no-spacing">
                 <div class="center buttoncard mdl-card__title">
                     <h2 class="mdl-card__title-text">Classes</h2>
-                    <button class="classadd mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" onclick="addclass()">
+                    <button class="classadd mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" onclick="addClass()">
                         <i class="material-icons">add</i>
                     </button>
                 </div>
                 <div id="classes" class="center mdl-card__actions mdl-card--border">
                   <form id="class0" action="#">
                       <div class="classname mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input class="mdl-textfield__input" type="text" id="classname0">
+                        <input class="mdl-textfield__input" type="text" id="classname0" onchange="updateClassData(this.id.substring(9))">
                         <label class="mdl-textfield__label" for="classname0">Class Name</label>
                       </div>
                       <div class="number mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                          <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classgrade0">
+                          <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classgrade0" oninput="updateClassData(this.id.substring(10))">
                           <label class="mdl-textfield__label" for="classgrade0">Grade</label>
                         <span class="mdl-textfield__error">Input is not a number!</span>
                       </div>
                       <div class="number mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                          <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classqp0">
+                          <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classqp0" oninput="updateClassData(this.id.substring(7))">
                           <label class="mdl-textfield__label" for="classqp0">QP</label>
                         <span class="mdl-textfield__error">Input is not a number!</span>
                       </div>
@@ -160,8 +151,7 @@
                       </button>
 
                       <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="classmenu0">
-                          <li class="mdl-menu__item" id="classdelete0" onclick="removeclass(this.id)">Delete</li>
-                          <li class="mdl-menu__item" id="classduplicate0" onclick="duplicate(this.id)">Duplicate</li>
+                          <li class="mdl-menu__item" id="classdelete0" onclick="deleteClass(this.id.substring(11))">Delete</li>
                       </ul>
                     </form>
                 </div>

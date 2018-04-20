@@ -1,63 +1,132 @@
 var c = null;
-var classNum = 1;
-var list = [];
+var classes = [];
 
 function onload() {
     c = document.getElementById("class0").cloneNode(true);
-    list[0] = c;
 }
 
-function addclass() {
-    var newC = c.cloneNode(true);
-    newC.setAttribute("id","class"+classNum);
-    newC.childNodes[1].childNodes[1].setAttribute("id","classname"+classNum);
-    newC.childNodes[1].childNodes[3].setAttribute("for","classname"+classNum);
-    newC.childNodes[3].childNodes[1].setAttribute("id","classgrade"+classNum);
-    newC.childNodes[3].childNodes[3].setAttribute("for","classgrade"+classNum);
-    newC.childNodes[5].childNodes[1].setAttribute("id","classqp"+classNum);
-    newC.childNodes[5].childNodes[3].setAttribute("for","classqp"+classNum);
-    newC.childNodes[7].setAttribute("for","classqp"+classNum);
-    newC.childNodes[9].setAttribute("id","classmenu"+classNum);
-    newC.childNodes[11].setAttribute("for","classmenu"+classNum);
-    newC.childNodes[11].childNodes[1].setAttribute("id","classdelete"+classNum);
-    newC.childNodes[11].childNodes[3].setAttribute("id","classduplicate"+classNum);
-    document.getElementById("classes").appendChild(newC);
-    list[classNum] = newC;
-    classNum++;
+function initializeGPA() {
+    loadClassesFromFB().then(function() {
+        updateClasses();
+        calculateGPA();
+    });
+}
+
+function addClass() {
+    var newClass = new Class("","","");
+    classes[classes.length] = newClass;
+    updateClasses();
+    uploadClassesToFB();
+}
+    
+function Class(name,grade,qp) {
+    return {
+        name: name,
+        grade: grade,
+        qp: qp
+    }
+}
+
+function ClassElement(Class,num) {
+    var newClass = c.cloneNode(true);
+    newClass.setAttribute("id","class"+num);
+    newClass.childNodes[1].childNodes[1].setAttribute("id","classname"+num);
+    newClass.childNodes[1].childNodes[3].setAttribute("for","classname"+num);
+    newClass.childNodes[3].childNodes[1].setAttribute("id","classgrade"+num);
+    newClass.childNodes[3].childNodes[3].setAttribute("for","classgrade"+num);
+    newClass.childNodes[5].childNodes[1].setAttribute("id","classqp"+num);
+    newClass.childNodes[5].childNodes[3].setAttribute("for","classqp"+num);
+    newClass.childNodes[7].setAttribute("for","classqp"+num);
+    newClass.childNodes[9].setAttribute("id","classmenu"+num);
+    newClass.childNodes[11].setAttribute("for","classmenu"+num);
+    newClass.childNodes[11].childNodes[1].setAttribute("id","classdelete"+num);
+    document.getElementById("classes").appendChild(newClass);
+    componentHandler.upgradeElements(newClass);
+    document.getElementById("classname"+num).value = Class.name;
+    document.getElementById("classgrade"+num).value = Class.grade;
+    document.getElementById("classqp"+num).value = Class.qp;
+    Array.prototype.forEach.call(document.querySelectorAll('.mdl-textfield'), function (elem) {
+    elem.MaterialTextfield.checkDirty();
+});
+    
+}
+
+function updateClasses() {
+    document.getElementById("classes").innerHTML = "";
+    if(classes.length == 0) {
+        document.getElementById("classes").innerHTML = "No classes added";
+    }
+    for(i = 0; i < classes.length; i++) {
+        new ClassElement(classes[i],i);
+    }
     componentHandler.upgradeDom();
 }
 
-function classupdate() {
+function updateClassData(id) {
+    classes[id].name = document.getElementById("classname"+id).value;
+    classes[id].grade = document.getElementById("classgrade"+id).value;
+    classes[id].qp = document.getElementById("classqp"+id).value;
+    calculateGPA();
+    uploadClassesToFB();
+}
+
+function calculateGPA() {
     var sum = 0;
-    var count = 0;
     var grade = 0;
     var qp = 0;
-    for(i = 0; i < list.length; i++) {
-        if(list[i] != null) {
-            if(document.getElementById("classgrade"+i).value != "") {
-                grade = parseInt(document.getElementById("classgrade"+i).value);
-            }
-            if(document.getElementById("classqp"+i).value != "") {
-                qp = parseInt(document.getElementById("classqp"+i).value);
-            }
+    var count = 0;
+    for(i = 0; i < classes.length; i++) {
+        if(classes[i].grade != "") {
+            grade = parseInt(document.getElementById("classgrade"+i).value);
             count++;
-            if(grade+qp > 100+qp)
-                sum += 100+qp;
-            else
-                sum += grade+qp;
+        } else {
+            grade = 0;
+        }
+        if(classes[i].qp != "") {
+            qp = parseInt(document.getElementById("classqp"+i).value);
+        } else {
+            qp = 0;
+        }
+        if(grade+qp > 100+qp) {
+            sum += 100+qp;
+        } else {
+            sum += grade+qp;
         }
     }
     if(count > 0) {
         sum /= count;
-        sum = sum.toFixed(2);
+        sum = sum.toFixed(3);
         document.getElementById("gpa").innerHTML = sum+"%";
+    } else {
+        document.getElementById("gpa").innerHTML = "0.000%";
     }
     
 }
 
-function removeclass(id) {
-    var e = document.getElementById("classes");
-    var d = document.getElementById("class"+id.substring(11));
-    e.removeChild(d);
-    list[parseInt(id.substring(11))] = null;
+function deleteClass(id) {
+    var parent = document.getElementById("classes");
+    var d = document.getElementById("class"+id);
+    parent.removeChild(d);
+    classes.splice(id,1);
+    uploadClassesToFB();
+    updateClasses();
+    
+}
+
+function uploadClassesToFB() {
+    var db = firebase.firestore();
+    return db.collection("users").doc(getUser().uid).update({
+        classes: classes
+    }).then().catch(function(error) {
+        console.log(error);
+    });
+}
+
+function loadClassesFromFB() {
+    var db = firebase.firestore();
+    return db.collection("users").doc(getUser().uid).get().then(function(doc) {
+        classes = doc.data().classes;
+    }).then().catch(function(error) {
+        console.log(error);
+    });
 }
