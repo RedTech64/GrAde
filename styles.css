@@ -97,3 +97,7 @@ o-options .mdl-checkbox__box-outline {
     max-width: 80px;
     padding-right: 10px;
 }
+
+.wrap {
+    display: block;
+}
