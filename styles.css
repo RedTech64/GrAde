@@ -78,13 +78,9 @@ o-options .mdl-checkbox__box-outline {
     border-right: 100px;
     padding-right: 20px;
 }
-.buttoncard {
-    position: relative;
-    overflow: visible;
-}
-.classadd {
+.class-add {
     position: absolute;
-    right: 20px;
+    right: 15px;
     bottom: -25px;
 }
 .classname {
@@ -98,6 +94,18 @@ o-options .mdl-checkbox__box-outline {
     padding-right: 10px;
 }
 
-.wrap {
-    display: block;
+.card-content {
+    padding: 16px;
+    text-align: center;
+}
+
+.card-settings {
+    padding: 8px;
+    text-align: left;
+    font-size: 16px;
+}
+
+.card-fab {
+    position: relative;
+    overflow: visible;
 }
