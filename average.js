@@ -76,7 +76,7 @@ function updateChips() {
     var chips = document.getElementById("chips");
     chips.innerHTML = "";
     for(i = 0; i < grades.length; i++) {
-        if(document.getElementById("points").checked) {
+        if(document.getElementById("weight").checked) {
             new Chip(grades[i].grade+"/"+grades[i].weight,grades.length);
         } else {
             new Chip(grades[i].grade,grades.length);

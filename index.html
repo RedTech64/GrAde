@@ -75,7 +75,7 @@
                     <div class="card-content">
                         <div>
                             <div class="mdc-text-field input" data-mdc-auto-init="MDCTextField">
-                                <input class="mdc-text-field__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="grade" onkeypress="handle(event)">
+                                <input class="mdc-text-field__input" type="text" id="grade" onkeypress="handle(event)">
                                 <label class="mdc-floating-label" for="grade">Grade</label>
                                 <div class="mdc-line-ripple"></div>
                             </div>
@@ -117,7 +117,7 @@
                     <div class="card-settings">
                         <div class="mdc-form-field">
                             <div class="mdc-checkbox">
-                                <input type="checkbox" class="mdc-checkbox__native-control" id="points" onchange="updateChips()"/>
+                                <input type="checkbox" class="mdc-checkbox__native-control" id="weight" onchange="updateChips()"/>
                                 <div class="mdc-checkbox__background">
                                     <svg class="mdc-checkbox__checkmark"
                                          viewBox="0 0 24 24">
@@ -129,7 +129,7 @@
                                     <div class="mdc-checkbox__mixedmark"></div>
                                 </div>
                             </div>
-                            <label for="points">Show Points</label>
+                            <label for="points">Show Weight</label>
                         </div>
                     </div>
                 </div>
