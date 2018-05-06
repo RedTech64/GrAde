@@ -10,7 +10,7 @@ function initializeAverage() {
 function handle(e) {
     if(e.keyCode === 13){
         e.preventDefault();
-        addChip();
+        checkInput();
     }
 }
 
@@ -26,6 +26,13 @@ function Chip(grade,num) {
         remove(this.id.substring(10));
     }
     }
+
+function Grade(grade,weight) {
+    return {
+        grade: grade,
+        weight: weight
+    }
+}
 
 function remove(id) {
     var chips = document.getElementById("chips");
@@ -45,11 +52,13 @@ function remove(id) {
     }
 
 function updateGrade() {
-    var sum = 0;
+    var top = 0;
+    var bottom = 0;
     for(i = 0; i < grades.length; i++) {
-        sum += parseInt(grades[i]);
+        top += parseInt(grades[i].grade);
+        bottom += parseInt(grades[i].weight);
     }
-    sum /= (grades.length);
+    var sum = (top/bottom)*100;
     if(document.getElementById("decimal").checked) {
         sum = sum.toFixed(2);
     } else {
@@ -66,9 +75,11 @@ function updateGrade() {
 function updateChips() {
     var chips = document.getElementById("chips");
     chips.innerHTML = "";
-    for(i = 1; i < grades.length; i++) {
-        if(grades[i] != null) {
-            new Chip(grades[i],i);
+    for(i = 0; i < grades.length; i++) {
+        if(document.getElementById("points").checked) {
+            new Chip(grades[i].grade+"/"+grades[i].weight,grades.length);
+        } else {
+            new Chip(grades[i].grade,grades.length);
         }
     }
     if(document.getElementById("chips").innerHTML == "") {
@@ -76,15 +87,30 @@ function updateChips() {
     }
 }
 
-function addChip() {
-    if(!document.getElementById("grade").value == "") {
-        new Chip(document.getElementById("grade").value,grades.length);
-        grades[grades.length] = parseInt(document.getElementById("grade").value);
-        if(document.getElementById("autoclear").checked) {
-            document.getElementById("grade").value = "";
+function addChip(Grade) {
+    console.log(Grade.grade);
+    console.log(Grade.weight);
+    grades[grades.length] = Grade;
+    if(document.getElementById("autoclear").checked) {
+        document.getElementById("grade").value = "";
+    }
+    updateChips();
+    updateGrade();
+    uploadGrades();
+}
+
+function checkInput() {
+    input = document.getElementById("grade").value;
+    if(isNaN(input) && input.includes('/')) {
+        var argOne = input.substring(0,input.indexOf('/'));
+        var argTwo = input.substring(input.indexOf('/')+1);
+        if(!isNaN(argOne) && !isNaN(argTwo)) {
+            addChip(new Grade(argOne,argTwo));
         }
-        updateGrade();
-        uploadGrades();
+    }
+    if(!isNaN(input)) {
+        console.log("one");
+        addChip(new Grade(parseInt(input),100));
     }
 }
 

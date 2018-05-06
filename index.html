@@ -79,7 +79,7 @@
                                 <label class="mdc-floating-label" for="grade">Grade</label>
                                 <div class="mdc-line-ripple"></div>
                             </div>
-                            <button class="mdc-button mdc-button--raised button-secondary-color" id="addButton" data-mdc-auto-init="MDCRipple" onclick="addChip()">
+                            <button class="mdc-button mdc-button--raised button-secondary-color" id="addButton" data-mdc-auto-init="MDCRipple" onclick="checkInput()">
                                 Add
                             </button>
                         </div>
@@ -102,9 +102,22 @@
                             </div>
                             <label for="autoclear">Auto Clear</label>
                         </div>
+                    </div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-card card-parent">
+                    <div class="card-content mdc-typography--headline4">Grades</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-content">
+                        <div class="hidden">
+                            <i class="input-trailing-icon material-icons mdc-chip__icon mdc-chip__icon--trailing" id="deletechip" tabindex="0" role="button">cancel</i>
+                        </div>
+                        <div class="center mdc-chip-set" id="chips" data-mdc-auto-init="MDCChipSet">No grades entered</div>
+                    </div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-settings">
                         <div class="mdc-form-field">
                             <div class="mdc-checkbox">
-                                <input type="checkbox" class="mdc-checkbox__native-control" id="points"/>
+                                <input type="checkbox" class="mdc-checkbox__native-control" id="points" onchange="updateChips()"/>
                                 <div class="mdc-checkbox__background">
                                     <svg class="mdc-checkbox__checkmark"
                                          viewBox="0 0 24 24">
@@ -116,18 +129,8 @@
                                     <div class="mdc-checkbox__mixedmark"></div>
                                 </div>
                             </div>
-                            <label for="points">Points</label>
+                            <label for="points">Show Points</label>
                         </div>
-                    </div>
-                </div>
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-card card-parent">
-                    <div class="card-content mdc-typography--headline4">Grades</div>
-                    <hr class="mdc-list-divider">
-                    <div class="card-content">
-                        <div class="hidden">
-                            <i class="input-trailing-icon material-icons mdc-chip__icon mdc-chip__icon--trailing" id="deletechip" tabindex="0" role="button">cancel</i>
-                        </div>
-                        <div class="center mdc-chip-set" id="chips" data-mdc-auto-init="MDCChipSet">No grades entered</div>
                     </div>
                 </div>
             </div>
