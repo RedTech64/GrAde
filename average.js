@@ -1,9 +1,9 @@
-var grades = [0];
+var grades = [];
 
 function initializeAverage() {
     loadGrades().then(function() {
         updateChips();
-        update();
+        updateGrade();
     });
 }
 
@@ -15,31 +15,47 @@ function handle(e) {
 }
 
 function Chip(grade,num) {
-    if(document.getElementById("chips").innerHTML == "No grades entered")
-        document.getElementById("chips").innerHTML = "";
-    document.getElementById("chips").innerHTML = document.getElementById("chips").innerHTML + "<span class=\"pad mdl-chip mdl-chip--deletable\" id=\"" + "chip" + num + "\"><span class=\"mdl-chip__text\">" + grade + "</span><button type=\"button\" class=\"mdl-chip__action\" id=\"" + "delete" + num + "\" onclick=\"remove(this.id)\"><i class=\"material-icons\">cancel</i></button></span>";
+    var chips = document.getElementById("chips");
+    var deletechip = document.getElementById("deletechip").cloneNode(true);
+    deletechip.setAttribute("id","deletechip"+num);
+    if(chips.innerHTML == "No grades entered") {
+        chips.innerHTML = "";
+    }
+    chips.MDCChipSet.addChip(grade,null,deletechip);
+    document.getElementById("deletechip"+num).onclick = function() {
+        remove(this.id.substring(10));
+    }
     }
 
 function remove(id) {
-    grades.splice(id.substring(6),1);
-    grades[0]--;
-    updateChips();
-    update();
+    var chips = document.getElementById("chips");
+    var num = 0;
+    for(i = 0; i < chips.childElementCount; i++) {
+        if(!chips.childNodes[i].getAttribute("class").includes("exit")) {
+            chips.childNodes[i].childNodes[1].setAttribute("id","deletechip"+num);
+            num++;
+        }
+    }
+    grades.splice(id,1);
+    if(grades.length == 0) {
+        chips.innerHTML = "No grades entered";
+    }
+    updateGrade();
     uploadGrades();
     }
 
-function update() {
+function updateGrade() {
     var sum = 0;
-    for(i = 1; i < grades.length; i++) {
+    for(i = 0; i < grades.length; i++) {
         sum += parseInt(grades[i]);
     }
-    sum /= (grades.length-1);
+    sum /= (grades.length);
     if(document.getElementById("decimal").checked) {
         sum = sum.toFixed(2);
     } else {
         sum = sum.toFixed(0);
     }
-    if(grades.length == 1) {
+    if(grades.length == 0) {
         document.getElementById("average").innerHTML = "0%";
     } else {
         document.getElementById("average").innerHTML = sum+"%";
@@ -62,14 +78,14 @@ function updateChips() {
 
 function addChip() {
     if(!document.getElementById("grade").value == "") {
-        new Chip(document.getElementById("grade").value,grades[0]+1);
-        grades[grades[0]+1] = parseInt(document.getElementById("grade").value);
-        grades[0]++;
-        update();
+        new Chip(document.getElementById("grade").value,grades.length);
+        grades[grades.length] = parseInt(document.getElementById("grade").value);
+        if(document.getElementById("autoclear").checked) {
+            document.getElementById("grade").value = "";
+        }
+        updateGrade();
         uploadGrades();
     }
-    if(document.getElementById("autoclear").checked)
-        document.getElementById("grade").value = "";
 }
 
 function uploadGrades() {

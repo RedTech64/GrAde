@@ -36,19 +36,15 @@ function ClassElement(Class,num) {
     newClass.childNodes[3].childNodes[3].setAttribute("for","classgrade"+num);
     newClass.childNodes[5].childNodes[1].setAttribute("id","classqp"+num);
     newClass.childNodes[5].childNodes[3].setAttribute("for","classqp"+num);
-    newClass.childNodes[7].setAttribute("for","classqp"+num);
-    newClass.childNodes[9].setAttribute("id","classmenu"+num);
-    newClass.childNodes[11].setAttribute("for","classmenu"+num);
-    newClass.childNodes[11].childNodes[1].setAttribute("id","classdelete"+num);
+    newClass.childNodes[7].childNodes[1].setAttribute("id","classdelete"+num);
     document.getElementById("classes").appendChild(newClass);
-    componentHandler.upgradeElements(newClass);
     document.getElementById("classname"+num).value = Class.name;
     document.getElementById("classgrade"+num).value = Class.grade;
     document.getElementById("classqp"+num).value = Class.qp;
-    Array.prototype.forEach.call(document.querySelectorAll('.mdl-textfield'), function (elem) {
-    elem.MaterialTextfield.checkDirty();
-});
-    
+    document.getElementById("classdelete"+num).addEventListener('MDCIconToggle:change', ({detail}) => {
+        deleteClass(num);
+    });
+    window.mdc.autoInit(document.getElementById('classes'));
 }
 
 function updateClasses() {
@@ -59,7 +55,6 @@ function updateClasses() {
     for(i = 0; i < classes.length; i++) {
         new ClassElement(classes[i],i);
     }
-    componentHandler.upgradeDom();
 }
 
 function updateClassData(id) {
