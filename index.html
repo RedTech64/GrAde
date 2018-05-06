@@ -129,7 +129,7 @@
                                     <div class="mdc-checkbox__mixedmark"></div>
                                 </div>
                             </div>
-                            <label for="points">Show Weight</label>
+                            <label for="weight">Show Weight</label>
                         </div>
                     </div>
                 </div>
@@ -145,40 +145,39 @@
                     </div>
                 </div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-9 mdc-card card-parent">
-                    <div class="card-content mdc-typography--headline4 card-fab">
+                    <div class="card-content mdc-typography--headline4 card-fab" onclick="addClass()">
                         Classes
                         <button class="mdc-fab class-add" data-mdc-auto-init="MDCRipple">
-                      <span class="mdc-fab__icon material-icons" aria-label="add" onclick="addClass()">
+                      <span class="mdc-fab__icon material-icons" aria-label="add">
                         add
                       </span>
                         </button>
                     </div>
                     <hr class="mdc-list-divider">
-                    <div id="classes" class="card-content">
-                        <div id="class0">
-                            <div class="class-name mdc-text-field input" data-mdc-auto-init="MDCTextField">
-                                <input class="mdc-text-field__input" type="text" id="classname0" onchange="updateClassData(this.id.substring(9))">
-                                <label class="mdc-floating-label" for="classname0">Class Name</label>
-                                <div class="mdc-line-ripple"></div>
-                            </div>
-                            <div class="number mdc-text-field input" data-mdc-auto-init="MDCTextField">
-                                <input class="mdc-text-field__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classgrade0" oninput="updateClassData(this.id.substring(10))">
-                                <label class="mdc-floating-label" for="classgrade0">Grade</label>
-                                <div class="mdc-line-ripple"></div>
-                            </div>
-                            <div class="number mdc-text-field input" data-mdc-auto-init="MDCTextField">
-                                <input class="mdc-text-field__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classqp0" oninput="updateClassData(this.id.substring(7))">
-                                <label class="mdc-floating-label" for="classqp0">QP</label>
-                                <div class="mdc-line-ripple"></div>
-                            </div>
-                            <div class="trash">
-                                <i class="mdc-icon-toggle material-icons" id="classdelete0" role="button" aria-pressed="false" data-mdc-auto-init="MDCIconToggle"
-                                   data-toggle-on='{"label": "Remove from favorites", "content": "delete"}'
-                                   data-toggle-off='{"label": "Add to favorites", "content": "delete"}'>
-                                </i>
-                            </div>
+                    <div id="class" class="hidden">
+                        <div class="class-name mdc-text-field input" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" id="classname" onchange="updateClassData(this.id.substring(9))">
+                            <label class="mdc-floating-label" for="classname">Class Name</label>
+                            <div class="mdc-line-ripple"></div>
+                        </div>
+                        <div class="number mdc-text-field input" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classgrade" oninput="updateClassData(this.id.substring(10))">
+                            <label class="mdc-floating-label" for="classgrade">Grade</label>
+                            <div class="mdc-line-ripple"></div>
+                        </div>
+                        <div class="number mdc-text-field input" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classqp" oninput="updateClassData(this.id.substring(7))">
+                            <label class="mdc-floating-label" for="classqp">QP</label>
+                            <div class="mdc-line-ripple"></div>
+                        </div>
+                        <div class="trash">
+                            <i class="mdc-icon-toggle material-icons" id="classdelete" role="button" aria-pressed="false" data-mdc-auto-init="MDCIconToggle"
+                               data-toggle-on='{"label": "Remove from favorites", "content": "delete"}'
+                               data-toggle-off='{"label": "Add to favorites", "content": "delete"}'>
+                            </i>
                         </div>
                     </div>
+                    <div id="classes" class="center card-content">No classes added</div>
                 </div>
             </div>
         </section>

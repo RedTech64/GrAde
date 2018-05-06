@@ -2,7 +2,7 @@ var c = null;
 var classes = [];
 
 function onload() {
-    c = document.getElementById("class0").cloneNode(true);
+    c = document.getElementById("class").cloneNode(true);
 }
 
 function initializeGPA() {
@@ -30,6 +30,7 @@ function Class(name,grade,qp) {
 function ClassElement(Class,num) {
     var newClass = c.cloneNode(true);
     newClass.setAttribute("id","class"+num);
+    newClass.removeAttribute("class");
     newClass.childNodes[1].childNodes[1].setAttribute("id","classname"+num);
     newClass.childNodes[1].childNodes[3].setAttribute("for","classname"+num);
     newClass.childNodes[3].childNodes[1].setAttribute("id","classgrade"+num);
@@ -41,10 +42,11 @@ function ClassElement(Class,num) {
     document.getElementById("classname"+num).value = Class.name;
     document.getElementById("classgrade"+num).value = Class.grade;
     document.getElementById("classqp"+num).value = Class.qp;
-    document.getElementById("classdelete"+num).addEventListener('MDCIconToggle:change', ({detail}) => {
+    console.log(num);
+    document.getElementById("classdelete"+num).onclick = function() {
         deleteClass(num);
-    });
-    window.mdc.autoInit(document.getElementById('classes'));
+    }
+    window.mdc.autoInit(document, () => {});
 }
 
 function updateClasses() {
@@ -99,9 +101,7 @@ function calculateGPA() {
 }
 
 function deleteClass(id) {
-    var parent = document.getElementById("classes");
-    var d = document.getElementById("class"+id);
-    parent.removeChild(d);
+    console.log("remove?");
     classes.splice(id,1);
     uploadClassesToFB();
     updateClasses();
