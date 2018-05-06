@@ -42,7 +42,6 @@ function ClassElement(Class,num) {
     document.getElementById("classname"+num).value = Class.name;
     document.getElementById("classgrade"+num).value = Class.grade;
     document.getElementById("classqp"+num).value = Class.qp;
-    console.log(num);
     document.getElementById("classdelete"+num).onclick = function() {
         deleteClass(num);
     }
@@ -101,7 +100,6 @@ function calculateGPA() {
 }
 
 function deleteClass(id) {
-    console.log("remove?");
     classes.splice(id,1);
     uploadClassesToFB();
     updateClasses();
