@@ -1,45 +1,70 @@
-var grades = [0];
+var grades = [];
 
 function initializeAverage() {
     loadGrades().then(function() {
         updateChips();
-        update();
+        updateGrade();
     });
 }
 
 function handle(e) {
     if(e.keyCode === 13){
         e.preventDefault();
-        addChip();
+        checkInput();
     }
 }
 
 function Chip(grade,num) {
-    if(document.getElementById("chips").innerHTML == "No grades entered")
-        document.getElementById("chips").innerHTML = "";
-    document.getElementById("chips").innerHTML = document.getElementById("chips").innerHTML + "<span class=\"pad mdl-chip mdl-chip--deletable\" id=\"" + "chip" + num + "\"><span class=\"mdl-chip__text\">" + grade + "</span><button type=\"button\" class=\"mdl-chip__action\" id=\"" + "delete" + num + "\" onclick=\"remove(this.id)\"><i class=\"material-icons\">cancel</i></button></span>";
+    var chips = document.getElementById("chips");
+    var deletechip = document.getElementById("deletechip").cloneNode(true);
+    deletechip.setAttribute("id","deletechip"+num);
+    if(chips.innerHTML == "No grades entered") {
+        chips.innerHTML = "";
+    }
+    chips.MDCChipSet.addChip(grade,null,deletechip);
+    document.getElementById("deletechip"+num).onclick = function() {
+        remove(this.id.substring(10));
+    }
     }
 
+function Grade(grade,weight) {
+    return {
+        grade: grade,
+        weight: weight
+    }
+}
+
 function remove(id) {
-    grades.splice(id.substring(6),1);
-    grades[0]--;
-    updateChips();
-    update();
+    var chips = document.getElementById("chips");
+    var num = 0;
+    for(i = 0; i < chips.childElementCount; i++) {
+        if(!chips.childNodes[i].getAttribute("class").includes("exit")) {
+            chips.childNodes[i].childNodes[1].setAttribute("id","deletechip"+num);
+            num++;
+        }
+    }
+    grades.splice(id,1);
+    if(grades.length == 0) {
+        chips.innerHTML = "No grades entered";
+    }
+    updateGrade();
     uploadGrades();
     }
 
-function update() {
-    var sum = 0;
-    for(i = 1; i < grades.length; i++) {
-        sum += parseInt(grades[i]);
+function updateGrade() {
+    var top = 0;
+    var bottom = 0;
+    for(i = 0; i < grades.length; i++) {
+        top += parseInt(grades[i].grade);
+        bottom += parseInt(grades[i].weight);
     }
-    sum /= (grades.length-1);
+    var sum = (top/bottom)*100;
     if(document.getElementById("decimal").checked) {
         sum = sum.toFixed(2);
     } else {
         sum = sum.toFixed(0);
     }
-    if(grades.length == 1) {
+    if(grades.length == 0) {
         document.getElementById("average").innerHTML = "0%";
     } else {
         document.getElementById("average").innerHTML = sum+"%";
@@ -50,9 +75,11 @@ function update() {
 function updateChips() {
     var chips = document.getElementById("chips");
     chips.innerHTML = "";
-    for(i = 1; i < grades.length; i++) {
-        if(grades[i] != null) {
-            new Chip(grades[i],i);
+    for(i = 0; i < grades.length; i++) {
+        if(document.getElementById("weight").checked) {
+            new Chip(grades[i].grade+"/"+grades[i].weight,i);
+        } else {
+            new Chip(grades[i].grade,i);
         }
     }
     if(document.getElementById("chips").innerHTML == "") {
@@ -60,16 +87,29 @@ function updateChips() {
     }
 }
 
-function addChip() {
-    if(!document.getElementById("grade").value == "") {
-        new Chip(document.getElementById("grade").value,grades[0]+1);
-        grades[grades[0]+1] = parseInt(document.getElementById("grade").value);
-        grades[0]++;
-        update();
-        uploadGrades();
-    }
-    if(document.getElementById("autoclear").checked)
+function addChip(Grade) {
+    grades[grades.length] = Grade;
+    if(document.getElementById("autoclear").checked) {
         document.getElementById("grade").value = "";
+    }
+    updateChips();
+    updateGrade();
+    uploadGrades();
+}
+
+function checkInput() {
+    input = document.getElementById("grade").value;
+    input = input.replace(/\s/g, '');
+    if(input != "" && isNaN(input) && input.includes('/')) {
+        var argOne = input.substring(0,input.indexOf('/'));
+        var argTwo = input.substring(input.indexOf('/')+1);
+        if(!isNaN(argOne) && !isNaN(argTwo)) {
+            addChip(new Grade(argOne,argTwo));
+        }
+    }
+    if(input != "" && !isNaN(input)) {
+        addChip(new Grade(parseInt(input),100));
+    }
 }
 
 function uploadGrades() {

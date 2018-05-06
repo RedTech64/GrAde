@@ -2,7 +2,7 @@ var c = null;
 var classes = [];
 
 function onload() {
-    c = document.getElementById("class0").cloneNode(true);
+    c = document.getElementById("class").cloneNode(true);
 }
 
 function initializeGPA() {
@@ -30,25 +30,22 @@ function Class(name,grade,qp) {
 function ClassElement(Class,num) {
     var newClass = c.cloneNode(true);
     newClass.setAttribute("id","class"+num);
+    newClass.removeAttribute("class");
     newClass.childNodes[1].childNodes[1].setAttribute("id","classname"+num);
     newClass.childNodes[1].childNodes[3].setAttribute("for","classname"+num);
     newClass.childNodes[3].childNodes[1].setAttribute("id","classgrade"+num);
     newClass.childNodes[3].childNodes[3].setAttribute("for","classgrade"+num);
     newClass.childNodes[5].childNodes[1].setAttribute("id","classqp"+num);
     newClass.childNodes[5].childNodes[3].setAttribute("for","classqp"+num);
-    newClass.childNodes[7].setAttribute("for","classqp"+num);
-    newClass.childNodes[9].setAttribute("id","classmenu"+num);
-    newClass.childNodes[11].setAttribute("for","classmenu"+num);
-    newClass.childNodes[11].childNodes[1].setAttribute("id","classdelete"+num);
+    newClass.childNodes[7].childNodes[1].setAttribute("id","classdelete"+num);
     document.getElementById("classes").appendChild(newClass);
-    componentHandler.upgradeElements(newClass);
     document.getElementById("classname"+num).value = Class.name;
     document.getElementById("classgrade"+num).value = Class.grade;
     document.getElementById("classqp"+num).value = Class.qp;
-    Array.prototype.forEach.call(document.querySelectorAll('.mdl-textfield'), function (elem) {
-    elem.MaterialTextfield.checkDirty();
-});
-    
+    document.getElementById("classdelete"+num).onclick = function() {
+        deleteClass(num);
+    }
+    window.mdc.autoInit(document, () => {});
 }
 
 function updateClasses() {
@@ -59,7 +56,6 @@ function updateClasses() {
     for(i = 0; i < classes.length; i++) {
         new ClassElement(classes[i],i);
     }
-    componentHandler.upgradeDom();
 }
 
 function updateClassData(id) {
@@ -104,9 +100,6 @@ function calculateGPA() {
 }
 
 function deleteClass(id) {
-    var parent = document.getElementById("classes");
-    var d = document.getElementById("class"+id);
-    parent.removeChild(d);
     classes.splice(id,1);
     uploadClassesToFB();
     updateClasses();

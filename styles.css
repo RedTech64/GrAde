@@ -1,70 +1,11 @@
-/**
- * Copyright 2015 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 html, body {
-  font-family: 'Roboto', 'Helvetica', sans-serif;
+  --mdc-theme-primary: #e53935;
+  --mdc-theme-secondary: #3f51b5;
+  --mdc-theme-on-primary: #ffffff;
+  --mdc-theme-on-secondary: #ffffff;
+    background-color: #f5f5f5;
 }
-.drawer .navigation {
-  z-index: -2;
-}
-.drawer-header {
-  box-sizing: border-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-justify-content: flex-end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
-  padding: 16px;
-  height: 151px;
-}
-.navigation {
-  -webkit-flex-grow: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-}
-.layout .navigation .mdl-navigation__link {
-  display: -webkit-flex !important;
-  display: -ms-flexbox !important;
-  display: flex !important;
-  -webkit-flex-direction: row;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  color: rgba(255, 255, 255, 0.56);
-  font-weight: 500;
-}
-.navigation .mdl-navigation__link .material-icons {
-  font-size: 24px;
-  color: rgba(255, 255, 255, 0.56);
-  margin-right: 32px;
-}
-o-options .mdl-checkbox__box-outline {
-  border-color: rgba(255, 255, 255, 0.89);
-}
-.display {
-    text-align: center;
-    font-size: 50px;
-    
-}
+
 .pad {
     margin-right: 5px;
 }
@@ -78,16 +19,12 @@ o-options .mdl-checkbox__box-outline {
     border-right: 100px;
     padding-right: 20px;
 }
-.buttoncard {
-    position: relative;
-    overflow: visible;
-}
-.classadd {
-    position: absolute;
-    right: 20px;
+.class-add {
+    position: absolute !important;
+    right: 15px;
     bottom: -25px;
 }
-.classname {
+.class-name {
     min-width: 100px;
     max-width: 350px;
     padding-right: 10px;
@@ -96,4 +33,81 @@ o-options .mdl-checkbox__box-outline {
     min-width: 50px;
     max-width: 80px;
     padding-right: 10px;
+}
+
+.card-content {
+    padding: 16px;
+    text-align: center;
+}
+
+.card-settings {
+    padding: 8px;
+    text-align: left;
+    font-size: 16px;
+}
+
+.card-fab {
+    position: relative !important;
+    overflow: visible;
+}
+
+.button-secondary-color {
+    background-color: #3f51b5 !important;
+}
+
+.card-parent {
+    min-width: fit-content !important;
+    height: fit-content !important;
+}
+
+.mdc-floating-label--float-above {
+    color: #e53935 !important;
+}
+
+.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-floating-label {
+    color: #c51162 !important;
+}
+
+.input {
+    margin: 7px;
+}
+
+.content {
+    display: flex;
+    flex: 1 1 auto;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.body {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    min-height: 100%;
+}
+
+.main {
+    padding-left: 16px;
+    padding-right: 16px;
+    min-width: -webkit-fill-available;
+}
+
+.app-bar {
+    top: 0px;
+    z-index: 1;
+}
+
+.trash {
+    display: inline-flex;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.card-display {
+    text-align: center;
+    padding: 0px;
 }

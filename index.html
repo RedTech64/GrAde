@@ -1,169 +1,194 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <title>GrAde</title>
-
     <link rel="shortcut icon" href="images/favicon.png">
-
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase-firestore.js"></script>
-
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-light_blue.min.css">
     <link rel="stylesheet" href="styles.css">
-    <script type="text/javascript" src="average.js"></script>
-    <script type="text/javascript" src="gpa.js"></script>
-    <script type="text/javascript" src="login.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@0.35.0/dist/material-components-web.css">
     <style>
-    #view-source {
-      position: fixed;
-      display: block;
-      right: 0;
-      bottom: 0;
-      margin-right: 40px;
-      margin-bottom: 40px;
-      z-index: 900;
-    }
+        #view-source {
+            position: fixed;
+            display: block;
+            right: 0;
+            bottom: 0;
+            margin-right: 40px;
+            margin-bottom: 40px;
+            z-index: 900;
+        }
     </style>
-  </head>
-  <body onload="onload()">
-    <div class="layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
-      <header class="header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
-        <div class="mdl-layout__header-row">
-          <span class="mdl-layout-title">Home</span>
-          <div class="mdl-layout-spacer"></div>
-          <button id="auth" class="mdl-button mdl-js-button mdl-button--primary" onclick="auth()">
-            Sign In
-          </button>
-          <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
-            <i class="material-icons">more_vert</i>
-          </button>
-          <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
-            <li class="mdl-menu__item">About</li>
-            <li class="mdl-menu__item">Contact</li>
-            <li class="mdl-menu__item">Legal information</li>
-          </ul>
+</head>
+<body class="body mdc-typography" onload="onload()">
+    <header class="app-bar mdc-top-app-bar mdc-elevation--z4">
+        <div class="mdc-top-app-bar__row">
+            <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                <span class="mdc-typography--headline4">GrAde</span>
+            </section>
+            <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+                <button class="mdc-button mdc-button--raised button-secondary-color" data-mdc-auto-init="MDCRipple" id="auth" onclick="auth()">
+                    Sign In
+                </button>
+            </section>
         </div>
-      </header>
-      <div class="drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
-        <header class="drawer-header">
-          <span class="mdl-typography--display-3">GrAde</span>
-          <div class="avatar-dropdown">
-            <div class="mdl-layout-spacer"></div>
-          </div>
-        </header>
-        <nav class="navigation mdl-navigation mdl-color--blue-grey-800">
-          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">grade</i>Home</a>
-          <div class="mdl-layout-spacer"></div>
-          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i><span class="visuallyhidden">Help</span></a>
-        </nav>
-      </div>
-      <main class="mdl-layout__content mdl-color--grey-100">
-        <section class="section--center mdl-grid">
-            <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--3-col mdl-grid--no-spacing">
-                <div class="center mdl-card__title">
-                    <h2 class="mdl-card__title-text">Grade</h2>
+    </header>
+    <div class="content mdc-toolbar-fixed-adjust">
+    <main class="main">
+        <section class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
+                    <div class="card-content  mdc-typography--headline4">Grade Average</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-display">
+                        <h1 class="display mdc-typography--headline3" id="average">0%</h1>
+                    </div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-settings">
+                        <div class="mdc-form-field">
+                            <div class="mdc-checkbox">
+                                <input type="checkbox" class="mdc-checkbox__native-control" id="decimal" onchange="updateGrade()"/>
+                                <div class="mdc-checkbox__background">
+                                    <svg class="mdc-checkbox__checkmark"
+                                         viewBox="0 0 24 24">
+                                        <path class="mdc-checkbox__checkmark-path"
+                                              fill="none"
+                                              stroke="white"
+                                              d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
+                                    </svg>
+                                    <div class="mdc-checkbox__mixedmark"></div>
+                                </div>
+                            </div>
+                            <label for="decimal">Decimal</label>
+                        </div>
+                    </div>
                 </div>
-                <div class="mdl-card__actions mdl-card--border">
-                    <h2 id=average class="display">0%</h2>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
+                    <div class="card-content mdc-typography--headline4">Add Grades</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-content">
+                        <div>
+                            <div class="mdc-text-field input" data-mdc-auto-init="MDCTextField">
+                                <input class="mdc-text-field__input" type="text" id="grade" onkeypress="handle(event)">
+                                <label class="mdc-floating-label" for="grade">Grade</label>
+                                <div class="mdc-line-ripple"></div>
+                            </div>
+                            <button class="mdc-button mdc-button--raised button-secondary-color" id="addButton" data-mdc-auto-init="MDCRipple" onclick="checkInput()">
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-settings">
+                        <div class="mdc-form-field">
+                            <div class="mdc-checkbox">
+                                <input type="checkbox" class="mdc-checkbox__native-control" id="autoclear" checked/>
+                                <div class="mdc-checkbox__background">
+                                    <svg class="mdc-checkbox__checkmark"
+                                         viewBox="0 0 24 24">
+                                        <path class="mdc-checkbox__checkmark-path"
+                                              fill="none"
+                                              stroke="white"
+                                              d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
+                                    </svg>
+                                    <div class="mdc-checkbox__mixedmark"></div>
+                                </div>
+                            </div>
+                            <label for="autoclear">Auto Clear</label>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            
-          <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--3-col mdl-grid--no-spacing">
-              <div class="center mdl-card__title">
-                    <h2 class="mdl-card__title-text">Input</h2>
-                </div>
-              <div class="mdl-card__actions mdl-card--border">
-                  <form action="#">
-                      <div class="gradetext mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                          <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="grade" onkeypress="handle(event)">
-				          <label class="mdl-textfield__label" for="grade">Grade</label>
-				          <span class="mdl-textfield__error">Input is not a number!</span>
-			          </div>
-                      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="addChip()" id="addButton">
-                          Add
-                      </button>
-			      </form>
-              </div>
-                  <div class="mdl-card__actions mdl-card--border">
-                      <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="autoclear">
-                      <input type="checkbox" id="autoclear" class="mdl-checkbox__input" checked>
-                         <span class="mdl-checkbox__label">Auto Clear</span>
-                      </label>
-                      <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="decimal">
-                      <input type="checkbox" id="decimal" class="mdl-checkbox__input" onchange="update()">
-                         <span class="mdl-checkbox__label">Decimal</span>
-                      </label>
-                  </div>
-              </div>
-            <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-grid--no-spacing">
-                <div class="center mdl-card__title">
-                    <h2 class="mdl-card__title-text">Grades</h2>
-                </div>
-                <div class="center mdl-card__actions mdl-card--border">
-                    <div id=chips>No grades entered</div>
-                </div>
-          </div>
-        </section>
-        <section class="section--center mdl-grid">
-            <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--3-col mdl-grid--no-spacing">
-                <div class="center mdl-card__title">
-                    <h2 class="mdl-card__title-text">GPA</h2>
-                </div>
-                <div class="center mdl-card__actions mdl-card--border">
-                    <h2 id=gpa class="display">0%</h2>
-                </div>
-            </div>
-            <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--9-col mdl-grid--no-spacing">
-                <div class="center buttoncard mdl-card__title">
-                    <h2 class="mdl-card__title-text">Classes</h2>
-                    <button class="classadd mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" onclick="addClass()">
-                        <i class="material-icons">add</i>
-                    </button>
-                </div>
-                <div id="classes" class="center mdl-card__actions mdl-card--border">
-                  <form id="class0" action="#">
-                      <div class="classname mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input class="mdl-textfield__input" type="text" id="classname0" onchange="updateClassData(this.id.substring(9))">
-                        <label class="mdl-textfield__label" for="classname0">Class Name</label>
-                      </div>
-                      <div class="number mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                          <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classgrade0" oninput="updateClassData(this.id.substring(10))">
-                          <label class="mdl-textfield__label" for="classgrade0">Grade</label>
-                        <span class="mdl-textfield__error">Input is not a number!</span>
-                      </div>
-                      <div class="number mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                          <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classqp0" oninput="updateClassData(this.id.substring(7))">
-                          <label class="mdl-textfield__label" for="classqp0">QP</label>
-                        <span class="mdl-textfield__error">Input is not a number!</span>
-                      </div>
-                      <div class="mdl-tooltip" for="classqp0">
-                          Quality Points<br>Points added to grade for GPA
-                      </div>
-                      <button id="classmenu0" class="mdl-button mdl-js-button mdl-button--icon">
-                      <i class="material-icons">more_vert</i>
-                      </button>
-
-                      <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="classmenu0">
-                          <li class="mdl-menu__item" id="classdelete0" onclick="deleteClass(this.id.substring(11))">Delete</li>
-                      </ul>
-                    </form>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-card card-parent">
+                    <div class="card-content mdc-typography--headline4">Grades</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-content">
+                        <div class="hidden">
+                            <i class="input-trailing-icon material-icons mdc-chip__icon mdc-chip__icon--trailing" id="deletechip" tabindex="0" role="button">cancel</i>
+                        </div>
+                        <div class="center mdc-chip-set" id="chips" data-mdc-auto-init="MDCChipSet">No grades entered</div>
+                    </div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-settings">
+                        <div class="mdc-form-field">
+                            <div class="mdc-checkbox">
+                                <input type="checkbox" class="mdc-checkbox__native-control" id="weight" onchange="updateChips()"/>
+                                <div class="mdc-checkbox__background">
+                                    <svg class="mdc-checkbox__checkmark"
+                                         viewBox="0 0 24 24">
+                                        <path class="mdc-checkbox__checkmark-path"
+                                              fill="none"
+                                              stroke="white"
+                                              d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
+                                    </svg>
+                                    <div class="mdc-checkbox__mixedmark"></div>
+                                </div>
+                            </div>
+                            <label for="weight">Show Weight</label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
-        
-      </main>
-    </div>
-      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" style="position: fixed; left: -1000px; height: -1000px;">
-      </svg>
-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 250" style="position: fixed; left: -1000px; height: -1000px;">
-      </svg>
-    <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-  </body>
+        <section class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
+                    <div class="card-content mdc-typography--headline4">GPA</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-display">
+                        <h1 class="display mdc-typography--headline3" id="gpa">0%</h1>
+                    </div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-9 mdc-card card-parent">
+                    <div class="card-content mdc-typography--headline4 card-fab" onclick="addClass()">
+                        Classes
+                        <button class="mdc-fab class-add" data-mdc-auto-init="MDCRipple">
+                      <span class="mdc-fab__icon material-icons" aria-label="add">
+                        add
+                      </span>
+                        </button>
+                    </div>
+                    <hr class="mdc-list-divider">
+                    <div id="class" class="hidden">
+                        <div class="class-name mdc-text-field input" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" id="classname" onchange="updateClassData(this.id.substring(9))">
+                            <label class="mdc-floating-label" for="classname">Class Name</label>
+                            <div class="mdc-line-ripple"></div>
+                        </div>
+                        <div class="number mdc-text-field input" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classgrade" oninput="updateClassData(this.id.substring(10))">
+                            <label class="mdc-floating-label" for="classgrade">Grade</label>
+                            <div class="mdc-line-ripple"></div>
+                        </div>
+                        <div class="number mdc-text-field input" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classqp" oninput="updateClassData(this.id.substring(7))">
+                            <label class="mdc-floating-label" for="classqp">QP</label>
+                            <div class="mdc-line-ripple"></div>
+                        </div>
+                        <div class="trash">
+                            <i class="mdc-icon-toggle material-icons" id="classdelete" role="button" aria-pressed="false" data-mdc-auto-init="MDCIconToggle"
+                               data-toggle-on='{"label": "Remove from favorites", "content": "delete"}'
+                               data-toggle-off='{"label": "Add to favorites", "content": "delete"}'>
+                            </i>
+                        </div>
+                    </div>
+                    <div id="classes" class="center card-content">No classes added</div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+</svg>
+</svg>
+</body>
+<script id="material" src="https://unpkg.com/material-components-web@latest/dist/material-components-web.js"></script>
+<script type="text/javascript" src="average.js"></script>
+<script type="text/javascript" src="gpa.js"></script>
+<script type="text/javascript" src="login.js"></script>
+<script type="text/javascript" src="theme.js"></script>
 </html>
