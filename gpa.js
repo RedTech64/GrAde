@@ -1,9 +1,4 @@
-var c = null;
 var classes = [];
-
-function onload() {
-    c = document.getElementById("class").cloneNode(true);
-}
 
 function initializeGPA() {
     loadClassesFromFB().then(function() {
@@ -28,16 +23,16 @@ function Class(name,grade,qp) {
 }
 
 function ClassElement(Class,num) {
-    var newClass = c.cloneNode(true);
+    var newClass = document.getElementById('class').cloneNode(true);
     newClass.setAttribute("id","class"+num);
     newClass.removeAttribute("class");
-    newClass.childNodes[1].childNodes[1].setAttribute("id","classname"+num);
-    newClass.childNodes[1].childNodes[3].setAttribute("for","classname"+num);
-    newClass.childNodes[3].childNodes[1].setAttribute("id","classgrade"+num);
-    newClass.childNodes[3].childNodes[3].setAttribute("for","classgrade"+num);
-    newClass.childNodes[5].childNodes[1].setAttribute("id","classqp"+num);
-    newClass.childNodes[5].childNodes[3].setAttribute("for","classqp"+num);
-    newClass.childNodes[7].childNodes[1].setAttribute("id","classdelete"+num);
+    newClass.childNodes[1].childNodes[1].childNodes[1].setAttribute("id","classname"+num);
+    newClass.childNodes[1].childNodes[1].childNodes[3].setAttribute("for","classname"+num);
+    newClass.childNodes[1].childNodes[3].childNodes[1].setAttribute("id","classgrade"+num);
+    newClass.childNodes[1].childNodes[3].childNodes[3].setAttribute("for","classgrade"+num);
+    newClass.childNodes[1].childNodes[5].childNodes[1].setAttribute("id","classqp"+num);
+    newClass.childNodes[1].childNodes[5].childNodes[3].setAttribute("for","classqp"+num);
+    newClass.childNodes[1].childNodes[7].childNodes[1].setAttribute("id","classdelete"+num);
     document.getElementById("classes").appendChild(newClass);
     document.getElementById("classname"+num).value = Class.name;
     document.getElementById("classgrade"+num).value = Class.grade;
@@ -51,9 +46,11 @@ function ClassElement(Class,num) {
 function updateClasses() {
     document.getElementById("classes").innerHTML = "";
     if(classes.length == 0) {
-        document.getElementById("classes").innerHTML = "No classes added";
+        var no = document.getElementById('no-class').cloneNode(true);
+        no.setAttribute('class',no.getAttribute('class').replace('hidden',''));
+        document.getElementById('classes').appendChild(no);
     }
-    for(i = 0; i < classes.length; i++) {
+    for(var i = 0; i < classes.length; i++) {
         new ClassElement(classes[i],i);
     }
 }
@@ -71,7 +68,7 @@ function calculateGPA() {
     var grade = 0;
     var qp = 0;
     var count = 0;
-    for(i = 0; i < classes.length; i++) {
+    for(var i = 0; i < classes.length; i++) {
         if(classes[i].grade != "") {
             grade = parseInt(document.getElementById("classgrade"+i).value);
             count++;
