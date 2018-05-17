@@ -174,8 +174,14 @@ function removeGrade(category,index) {
 }
 
 function clearGrades(index) {
-    categoryData[index].grades = [];
-    categoryElements[index].updateChips([]);
+    if(advanced) {
+        categoryData[index].grades = [];
+        categoryElements[index].updateChips([]);
+    } else {
+        grades = [];
+       singleCategory.updateChips([]);
+    }
+
     updateGrade();
     uploadAverageData();
 }
@@ -263,8 +269,12 @@ function updateWeight(weight,index) {
 }
 
 function reloadAllGrades() {
-    for(var i = 0; i < categoryElements.length; i++) {
-        categoryElements[i].updateChips(categoryData[i].grades);
+    if(advanced) {
+        for (var i = 0; i < categoryElements.length; i++) {
+            categoryElements[i].updateChips(categoryData[i].grades);
+        }
+    } else {
+        singleCategory.updateChips(grades);
     }
 }
 

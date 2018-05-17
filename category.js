@@ -147,7 +147,11 @@ class CategoryElement {
             if(document.getElementById("weight").checked) {
                 this.newChip(grades[i].grade+"/"+grades[i].weight,i);
             } else {
-                this.newChip(Math.round((grades[i].grade/grades[i].weight)*100),i);
+                if(grades[i].weight != 0) {
+                    this.newChip(Math.round((grades[i].grade/grades[i].weight)*100),i);
+                } else {
+                    this.newChip(grades[i].grade+"/"+grades[i].weight,i);
+                }
             }
         }
         if(this.chips.innerHTML == "") {
