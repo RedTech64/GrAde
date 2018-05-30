@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Average your grades and calculate your GPA.">
+    <meta name="description" content="Average your grades and calculate your GPA using GrAde.">
+    <meta name="keywords" content="GrAde,GPA,GPA Calculator,Grade Calculator,Grade Averager">
+    <meta name="author" content="Cole Weinman">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <title>GrAde</title>
-    <link rel="shortcut icon" href="images/favicon.png">
+    <title>GrAde - Simple Grade Calculator</title>
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase-firestore.js"></script>
@@ -50,7 +50,14 @@
     <main class="main">
         <section class="mdc-layout-grid">
             <div class="mdc-layout-grid__inner" id="average-cards">
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4 mdc-card card-parent">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
+                    <div class="card-content  mdc-typography--headline4">Grade Averager</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-content">
+                        Use the grade averager to determine your grade in a class by adding your individual grades. Use advanced mode to create different grading categories. For classes that use the point system, input your grade as a fraction (Ex: 25/30).
+                    </div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
                     <div class="card-content  mdc-typography--headline4">Grade Average</div>
                     <hr class="mdc-list-divider">
                     <div class="card-display">
@@ -81,7 +88,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4 mdc-card card-parent hidden" id="category-manager-card">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent hidden" id="category-manager-card">
                     <div class="card-content mdc-typography--headline4 card-fab" onclick="addCategory()">
                         Categories
                         <button class="mdc-fab class-add" data-mdc-auto-init="MDCRipple">
@@ -139,7 +146,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4 mdc-card card-parent">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
                     <div class="card-content mdc-typography--headline4">Add Grades</div>
                     <hr class="mdc-list-divider">
                     <div class="card-content card-fab">
@@ -208,13 +215,20 @@
         <section class="mdc-layout-grid">
             <div class="mdc-layout-grid__inner">
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
+                    <div class="card-content  mdc-typography--headline4">GPA Calculator</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-content">
+                        Use the GPA calculator to determine your overall grade point average. Add classes and input your overall grade and add quality points if it a Pre-AP, AP, or Honors course.
+                    </div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
                     <div class="card-content mdc-typography--headline4">GPA</div>
                     <hr class="mdc-list-divider">
                     <div class="card-display">
                         <h1 class="display mdc-typography--headline3" id="gpa">0%</h1>
                     </div>
                 </div>
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-9 mdc-card card-parent">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-card card-parent">
                     <div class="card-content mdc-typography--headline4 card-fab" onclick="addClass()">
                         Classes
                         <button class="mdc-fab class-add" data-mdc-auto-init="MDCRipple">
@@ -407,4 +421,5 @@
 <script type="text/javascript" src="login.js"></script>
 <script type="text/javascript" src="theme.js"></script>
 <script type="text/javascript" src="category.js"></script>
+<script type="text/javascript" src="finalgrade.js"></script>
 </html>
