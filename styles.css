@@ -173,3 +173,13 @@ html, body {
 .mdc-notched-outline svg {
     position: relative !important;
 }
+
+.ad {
+    display: -webkit-box;
+}
+
+.footer {
+    position: absolute;
+    bottom: 6px;
+    left: 5px;
+}

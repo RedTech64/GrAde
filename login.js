@@ -19,6 +19,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         setUpData().then(function() {
             initializeAverage();
             initializeGPA();
+            initializeFinalGrade();
         });
     } else {
         console.log("User signed out");
@@ -65,7 +66,8 @@ function setUpData() {
                 advanced: false,
                 grades: [],
                 categoryData: [],
-                classes: []
+                classes: [],
+                finalgrade: ['','','','','','']
             });
         }
     }).catch(function(error) {

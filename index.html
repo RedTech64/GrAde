@@ -25,6 +25,13 @@
             z-index: 900;
         }
     </style>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-7657025228539192",
+            enable_page_level_ads: true
+        });
+    </script>
 </head>
 <body class="body mdc-typography">
     <header class="app-bar mdc-top-app-bar mdc-elevation--z4">
@@ -265,6 +272,92 @@
         <section class="mdc-layout-grid">
             <div class="mdc-layout-grid__inner">
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
+                    <div class="card-content  mdc-typography--headline4">Final Grade Calculator</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-content">
+                        Use the Final Grade Calculator to determine your final grade in your class. Enter the grades your received for each quarter, and the grade you received for your semester exams. Use the up and down arrow to easily change your grade to determine what you might need to make to achieve a certain grade.
+                    </div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
+                    <div class="card-content  mdc-typography--headline4">Final Grade</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-display">
+                        <h1 class="display mdc-typography--headline3" id="final-grade">0%</h1>
+                        <h1 class="display mdc-typography--headline4" id="semester1-grade">Semester 1: 0%</h1>
+                        <h1 class="display mdc-typography--headline4" id="semester2-grade">Semester 2: 0%</h1>
+                    </div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
+                    <div class="card-content  mdc-typography--headline4">1st Semester</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-content">
+                        <div class="mdc-text-field mdc-text-field--outlined no-top input" id="quarter1" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" id="quarter1Input" oninput="updateFinalGrade()" onkeydown="checkArrowKeys(event,this.id)">
+                            <label class="mdc-floating-label" for="quarter1Input">Quarter 1</label>
+                            <div class="mdc-notched-outline">
+                                <svg>
+                                    <path class="mdc-notched-outline__path"/>
+                                </svg>
+                            </div>
+                            <div class="mdc-notched-outline__idle"></div>
+                        </div>
+                        <div class="mdc-text-field mdc-text-field--outlined no-top input" id="quarter2" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" id="quarter2Input" oninput="updateFinalGrade()" onkeydown="checkArrowKeys(event,this.id)">
+                            <label class="mdc-floating-label" for="quarter2Input">Quarter 2</label>
+                            <div class="mdc-notched-outline">
+                                <svg>
+                                    <path class="mdc-notched-outline__path"/>
+                                </svg>
+                            </div>
+                            <div class="mdc-notched-outline__idle"></div>
+                        </div>
+                        <div class="mdc-text-field mdc-text-field--outlined no-top input" id="semester1-exam" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" id="semester1-examInput" oninput="updateFinalGrade()" onkeydown="checkArrowKeys(event,this.id)">
+                            <label class="mdc-floating-label" for="semester1-examInput">Semester 1 Exam</label>
+                            <div class="mdc-notched-outline">
+                                <svg>
+                                    <path class="mdc-notched-outline__path"/>
+                                </svg>
+                            </div>
+                            <div class="mdc-notched-outline__idle"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
+                    <div class="card-content  mdc-typography--headline4">2nd Semester</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-content">
+                        <div class="mdc-text-field mdc-text-field--outlined no-top input" id="quarter3" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" id="quarter3Input" oninput="updateFinalGrade()" onkeydown="checkArrowKeys(event,this.id)">
+                            <label class="mdc-floating-label" for="quarter3Input">Quarter 3</label>
+                            <div class="mdc-notched-outline">
+                                <svg>
+                                    <path class="mdc-notched-outline__path"/>
+                                </svg>
+                            </div>
+                            <div class="mdc-notched-outline__idle"></div>
+                        </div>
+                        <div class="mdc-text-field mdc-text-field--outlined no-top input" id="quarter4" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" id="quarter4Input" oninput="updateFinalGrade()" onkeydown="checkArrowKeys(event,this.id)">
+                            <label class="mdc-floating-label" for="quarter4Input">Quarter 4</label>
+                            <div class="mdc-notched-outline">
+                                <svg>
+                                    <path class="mdc-notched-outline__path"/>
+                                </svg>
+                            </div>
+                            <div class="mdc-notched-outline__idle"></div>
+                        </div>
+                        <div class="mdc-text-field mdc-text-field--outlined no-top input" id="semester2-exam" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" id="semester2-examInput" oninput="updateFinalGrade()" onkeydown="checkArrowKeys(event,this.id)">
+                            <label class="mdc-floating-label" for="semester2-examInput">Semester 2 Exam</label>
+                            <div class="mdc-notched-outline">
+                                <svg>
+                                    <path class="mdc-notched-outline__path"/>
+                                </svg>
+                            </div>
+                            <div class="mdc-notched-outline__idle"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

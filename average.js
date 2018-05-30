@@ -4,8 +4,6 @@ var categoryElements = [];
 var advanced;
 var singleCategory;
 
-initializeAverage();
-
 function initializeAverage() {
     loadAverageData().then(function() {
         changeMode(false);
