@@ -133,7 +133,7 @@ html, body {
 }
 
 .trash-icon {
-    top: 4px;
+    top: 3px;
 }
 
 .hidden {
@@ -149,7 +149,7 @@ html, body {
     margin-top: 0px !important;
 }
 
-.slider {
+.switch {
     margin: 7px;
 }
 
@@ -160,7 +160,7 @@ html, body {
 }
 
 .category-slider {
-    min-width: 20px;
+    min-width: 10px;
     max-width: 200px;
     padding-right: 10px;
     height: 31px !important;
@@ -182,4 +182,12 @@ html, body {
     position: absolute;
     bottom: 6px;
     left: 5px;
+}
+
+.radio {
+    margin-bottom: 10px;
+}
+
+.layout-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px,1fr)) !important;
 }

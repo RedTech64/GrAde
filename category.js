@@ -19,6 +19,10 @@ class CategoryElement {
         var categorychips = document.getElementById('category-selector-chips');
         categorychips.MDCChipSet.addChip(this.name,null,null);
         this.chip = categorychips.MDCChipSet.chips[this.index];
+        document.getElementById('category-selector-chips').childNodes[this.index].setAttribute('id','category-chip'+this.index);
+        document.getElementById('category-selector-chips').childNodes[this.index].onclick = function() {
+          fixCategoryChips(this.id.substring(13));
+        };
 
         //Create Grade Card
         this.card = document.getElementById('category-card').cloneNode(true);
@@ -43,9 +47,11 @@ class CategoryElement {
         this.edit.setAttribute('id','category'+this.index);
         this.edit.childNodes[1].childNodes[1].setAttribute('id','category-name'+this.index);
         this.edit.childNodes[1].childNodes[1].childNodes[1].setAttribute('id','category-name-input'+this.index);
+        this.edit.childNodes[1].childNodes[1].childNodes[3].setAttribute('for','category-name-input'+this.index);
         this.edit.childNodes[1].childNodes[1].childNodes[1].value = " ";
         this.edit.childNodes[1].childNodes[3].setAttribute('id','category-weight'+this.index);
         this.edit.childNodes[1].childNodes[3].childNodes[1].setAttribute('id','category-weight-input'+this.index);
+        this.edit.childNodes[1].childNodes[3].childNodes[3].setAttribute('for','category-weight-input'+this.index);
         this.edit.childNodes[1].childNodes[3].childNodes[1].value = " ";
         this.edit.childNodes[1].childNodes[5].setAttribute('id','category-slider'+this.index);
         this.edit.childNodes[1].childNodes[7].childNodes[1].setAttribute('id','category-delete'+this.index);

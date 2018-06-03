@@ -63,9 +63,8 @@ function setUpData() {
             users.doc(user.uid).set({
                 name: user.displayName,
                 email: user.email,
-                advanced: false,
-                grades: [],
-                categoryData: [],
+                selectedAverage: 0,
+                average: [],
                 classes: [],
                 finalgrade: ['','','','','','']
             });
