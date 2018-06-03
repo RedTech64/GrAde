@@ -2,7 +2,6 @@ finalgrade = [];
 
 function initializeFinalGrade() {
     loadFGDataFromFB().then(function() {
-        console.log(finalgrade);
         document.getElementById('quarter1').MDCTextField.value = finalgrade[0];
         document.getElementById('quarter2').MDCTextField.value = finalgrade[1];
         document.getElementById('semester1-exam').MDCTextField.value = finalgrade[2];
@@ -22,7 +21,6 @@ function checkArrowKeys(e,id) {
         updateFinalGrade();
     }
     if(e.keyCode == 40 && !isNaN(document.getElementById(id).value) && document.getElementById(id).value != ''){
-        console.log(id);
         e.preventDefault();
         document.getElementById(id).value = parseInt(document.getElementById(id).value)-1;
         updateFinalGrade();

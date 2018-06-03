@@ -39,8 +39,8 @@ function ClassElement(Class,num) {
     document.getElementById("classqp"+num).value = Class.qp;
     document.getElementById("classdelete"+num).onclick = function() {
         deleteClass(num);
-    }
-    window.mdc.autoInit(document, () => {});
+    };
+    window.mdc.autoInit(document.getElementById('classes'));
 }
 
 function updateClasses() {
