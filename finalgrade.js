@@ -1,16 +1,15 @@
 finalgrade = [];
 
-function initializeFinalGrade() {
-    loadFGDataFromFB().then(function() {
-        document.getElementById('quarter1').MDCTextField.value = finalgrade[0];
-        document.getElementById('quarter2').MDCTextField.value = finalgrade[1];
-        document.getElementById('semester1-exam').MDCTextField.value = finalgrade[2];
-        document.getElementById('quarter3').MDCTextField.value = finalgrade[3];
-        document.getElementById('quarter4').MDCTextField.value = finalgrade[4];
-        document.getElementById('semester2-exam').MDCTextField.value = finalgrade[5];
-        window.mdc.autoInit(document, () => {});
-        updateFinalGrade();
-    });
+function initializeFinalGrade(data) {
+    finalgrade = data.finalgrade;
+    document.getElementById('quarter1').MDCTextField.value = finalgrade[0];
+    document.getElementById('quarter2').MDCTextField.value = finalgrade[1];
+    document.getElementById('semester1-exam').MDCTextField.value = finalgrade[2];
+    document.getElementById('quarter3').MDCTextField.value = finalgrade[3];
+    document.getElementById('quarter4').MDCTextField.value = finalgrade[4];
+    document.getElementById('semester2-exam').MDCTextField.value = finalgrade[5];
+    window.mdc.autoInit(document, () => {});
+    updateFinalGrade();
 }
 
 function checkArrowKeys(e,id) {
@@ -46,15 +45,6 @@ function uploadFGDataToFB() {
     var db = firebase.firestore();
     return db.collection("users").doc(getUser().uid).update({
         finalgrade: finalgrade
-    }).then().catch(function(error) {
-        console.log(error);
-    });
-}
-
-function loadFGDataFromFB() {
-    var db = firebase.firestore();
-    return db.collection("users").doc(getUser().uid).get().then(function(doc) {
-        finalgrade = doc.data().finalgrade;
     }).then().catch(function(error) {
         console.log(error);
     });

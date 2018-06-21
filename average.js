@@ -3,22 +3,49 @@ var categoryData = [];
 var categoryElements = [];
 var averageElements = [];
 var selected;
-
+var initialized = false;
 var oldData = [];
 
-function initializeAverage() {
-    loadAverageData().then(function() {
-        if(oldData != null && average == null) {
-            average = [];
-            average[0] = new Average('Average 1',0,oldData);
-            selected = 0;
-        }
-        if(average.length == 0) {
-            average[0] = new Average('Average 1',0,[new Category('Category 1',[],100,100)]);
-        }
+function initializeAverage(data) {
+    var oldAverage = average;
+    var oldSelected = selected;
+    console.log(data);
+    average = data.average;
+    selected = data.averageSelected;
+    oldData = data.categories;
+    if (average == null) {
+        average = [];
+    }
+    if (selected == null) {
+        selected = 0;
+    }
+    if (oldData != null) {
+        average[0] = new Average('Average 1', 0, oldData);
+    }
+    if (average.length == 0) {
+        average[0] = new Average('Average 1', 0, [new Category('Category 1', [], 100, 100)]);
+    }
+    if(!initialized) {
         updateAverages();
         loadAverage(selected);
-    });
+        initialized = true;
+    } else {
+        console.log(oldAverage);
+        console.log(average);
+        if(JSON.stringify(oldAverage[selected].categories) != JSON.stringify(average[selected].categories)) {
+            console.log('category');
+            categoryData = average[selected].categories;
+            updateCategories();
+        } else if(JSON.stringify(oldAverage[selected]) != JSON.stringify(average[selected])) {
+            console.log('average');
+            loadAverage(selected);
+        } else if(oldSelected != selected) {
+            updateAverages();
+            loadAverage(selected);
+        } else {
+            console.log('no change');
+        }
+    }
 }
 
 function loadAverage(index) {
@@ -26,7 +53,7 @@ function loadAverage(index) {
     categoryData = average[index].categories;
     updateCategories();
     updateGrade();
-    uploadAverageData();
+    //uploadAverageData();
 }
 
 function handle(e) {
@@ -138,7 +165,7 @@ function updateCategories() {
 }
 
 function fixCategoryChips(index) {
-    average[selected].selectedCategory = index;
+    average[selected].selectedCategory = parseInt(index);
     for(var i = 0; i < categoryData.length; i++) {
         var foundation = document.getElementById('category-selector-chips').MDCChipSet.chips[i].getDefaultFoundation();
         if(i == index) {
@@ -165,9 +192,11 @@ function addCategory() {
     var newWeight;
     for(var i = 0; i < categoryElements.length-1; i++) {
         newWeight = categoryElements[i].getWeight()*((categoryElements.length-1)/categoryElements.length);
+        newWeight = Math.floor(newWeight);
         categoryElements[i].setWeight(newWeight);
         categoryData[i].weight = newWeight;
         sum += newWeight;
+        sum = Math.floor(sum);
     }
     categoryElements[categoryElements.length-1].setWeight(100-sum);
     categoryData[categoryData.length-1].weight = 100-sum;
@@ -205,9 +234,9 @@ function getCategoryName() {
 }
 
 function removeCategory(index) {
-    var weight = categoryData[index].weight;
     categoryData.splice(index,1);
     updateCategories();
+    uploadAverageData();
 }
 
 function syncWeight(index) {
@@ -288,7 +317,7 @@ function checkInput() {
         var argOne = input.substring(0,input.indexOf('/'));
         var argTwo = input.substring(input.indexOf('/')+1);
         if(!isNaN(argOne) && !isNaN(argTwo)) {
-            addGrade(new Grade(argOne,argTwo),getSelected());
+            addGrade(new Grade(parseInt(argOne),parseInt(argTwo)),getSelected());
         }
     }
     if(input != "" && !isNaN(input)) {
@@ -304,7 +333,7 @@ function updateName(name,index) {
 
 function updateWeight(weight,index) {
     categoryElements[index].setWeight(weight);
-    categoryData[index].weight = weight;
+    categoryData[index].weight = parseInt(weight);
     updateGrade();
     uploadAverageData();
 }
@@ -315,26 +344,16 @@ function reloadAllGrades() {
     }
 }
 
-function uploadAverageData() {
+function uploadAverageData() {3
+    console.log('UPLOAD');
     if(categoryData == null) {
         categoryData = [];
     }
     var db = firebase.firestore();
+    average[selected].categories = categoryData;
     return db.collection("users").doc(getUser().uid).update({
         average: average,
-        categories: categoryData,
         averageSelected: selected
-    }).then().catch(function(error) {
-        console.log(error);
-    });
-}
-
-function loadAverageData() {
-    var db = firebase.firestore();
-    return db.collection("users").doc(getUser().uid).get().then(function(doc) {
-        average = doc.data().average;
-        selected = doc.data().averageSelected;
-        oldData = doc.data().categories;
     }).then().catch(function(error) {
         console.log(error);
     });

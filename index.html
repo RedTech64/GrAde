@@ -1,6 +1,15 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-85738961-2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-85738961-2');
+    </script>
     <meta charset="utf-8">
     <meta name="description" content="Average your grades and calculate your GPA using GrAde.">
     <meta name="keywords" content="GrAde,GPA,GPA Calculator,Grade Calculator,Grade Averager">
@@ -13,7 +22,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://unpkg.com/material-components-web@0.35.0/dist/material-components-web.css">
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@0.35.2/dist/material-components-web.css">
     <style>
         #view-source {
             position: fixed;
@@ -25,13 +34,6 @@
             z-index: 900;
         }
     </style>
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <script>
-        (adsbygoogle = window.adsbygoogle || []).push({
-            google_ad_client: "ca-pub-7657025228539192",
-            enable_page_level_ads: true
-        });
-    </script>
 </head>
 <body class="body mdc-typography">
     <header class="app-bar mdc-top-app-bar mdc-elevation--z4">
@@ -449,10 +451,11 @@
         Created by Cole Weinman
     </div>
 </body>
-<script id="material" src="https://unpkg.com/material-components-web@latest/dist/material-components-web.js"></script>
+<script id="material" src="https://unpkg.com/material-components-web@0.35.2/dist/material-components-web.js"></script>
+<script type="text/javascript" src="login.js"></script>
+<script type="text/javascript" src="firestore.js"></script>
 <script type="text/javascript" src="average.js"></script>
 <script type="text/javascript" src="gpa.js"></script>
-<script type="text/javascript" src="login.js"></script>
 <script type="text/javascript" src="theme.js"></script>
 <script type="text/javascript" src="category.js"></script>
 <script type="text/javascript" src="finalgrade.js"></script>

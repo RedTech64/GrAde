@@ -1,10 +1,9 @@
 var classes = [];
 
-function initializeGPA() {
-    loadClassesFromFB().then(function() {
-        updateClasses();
-        calculateGPA();
-    });
+function initializeGPA(data) {
+    classes = data.classes;
+    updateClasses();
+    calculateGPA();
 }
 
 function addClass() {
@@ -40,7 +39,7 @@ function ClassElement(Class,num) {
     document.getElementById("classdelete"+num).onclick = function() {
         deleteClass(num);
     };
-    window.mdc.autoInit(document.getElementById('classes'));
+    mdc.autoInit(document, () => {});
 }
 
 function updateClasses() {
@@ -107,15 +106,6 @@ function uploadClassesToFB() {
     var db = firebase.firestore();
     return db.collection("users").doc(getUser().uid).update({
         classes: classes
-    }).then().catch(function(error) {
-        console.log(error);
-    });
-}
-
-function loadClassesFromFB() {
-    var db = firebase.firestore();
-    return db.collection("users").doc(getUser().uid).get().then(function(doc) {
-        classes = doc.data().classes;
     }).then().catch(function(error) {
         console.log(error);
     });

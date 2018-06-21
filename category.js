@@ -168,7 +168,7 @@ class CategoryElement {
     newChip(grade,num) {
         var deletechip = document.getElementById("delete-chip").cloneNode(true);
         deletechip.setAttribute('id','delete-chip'+num);
-        deletechip.setAttribute('category',num);
+        deletechip.setAttribute('category',this.index);
         if(this.chips.innerHTML == "No grades entered") {
             this.chips.innerHTML = "";
         }

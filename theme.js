@@ -1,1 +1,1 @@
-mdc.autoInit();
+mdc.autoInit(document, () => {});
