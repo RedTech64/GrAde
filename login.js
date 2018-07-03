@@ -17,8 +17,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         if(!user.isAnonymous)
             document.getElementById("auth").innerHTML = "Sign Out";
         setUpData().then(function() {
-            initializeAverage();
-            initializeGPA();
+            initialize();
         });
     } else {
         console.log("User signed out");
@@ -62,8 +61,10 @@ function setUpData() {
             users.doc(user.uid).set({
                 name: user.displayName,
                 email: user.email,
-                grades: [],
-                classes: []
+                selectedAverage: 0,
+                average: [],
+                classes: [],
+                finalgrade: ['','','','','','']
             });
         }
     }).catch(function(error) {

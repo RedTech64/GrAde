@@ -1,19 +1,28 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-85738961-2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-85738961-2');
+    </script>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+    <meta name="description" content="Average your grades and calculate your GPA using GrAde.">
+    <meta name="keywords" content="GrAde,GPA,GPA Calculator,Grade Calculator,Grade Averager">
+    <meta name="author" content="Cole Weinman">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <title>GrAde</title>
-    <link rel="shortcut icon" href="images/favicon.png">
+    <title>GrAde - Simple Grade Calculator</title>
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase-firestore.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://unpkg.com/material-components-web@0.35.0/dist/material-components-web.css">
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@0.35.2/dist/material-components-web.css">
     <style>
         #view-source {
             position: fixed;
@@ -26,7 +35,7 @@
         }
     </style>
 </head>
-<body class="body mdc-typography" onload="onload()">
+<body class="body mdc-typography">
     <header class="app-bar mdc-top-app-bar mdc-elevation--z4">
         <div class="mdc-top-app-bar__row">
             <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
@@ -42,101 +51,212 @@
     <div class="content mdc-toolbar-fixed-adjust">
     <main class="main">
         <section class="mdc-layout-grid">
-            <div class="mdc-layout-grid__inner">
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
+            <div class="mdc-layout-grid__inner layout-grid" id="average-cards">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 mdc-card card-parent" id="ga-description-card">
+                    <div class="card-content  mdc-typography--headline4">Grade Averager</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-content">
+                        Use the grade averager to determine your grade in a class by adding your individual grades. Use advanced mode to create different grading categories. For classes that use the point system, input your grade as a fraction (Ex: 25/30).
+                    </div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent" id="averages">
+                    <div class="card-content mdc-typography--headline4 card-fab" onclick="addAverage()">
+                        Averages
+                        <button class="mdc-fab class-add" data-mdc-auto-init="MDCRipple">
+                      <span class="mdc-fab__icon material-icons" aria-label="add">
+                        add
+                      </span>
+                        </button>
+                    </div>
+                    <hr class="mdc-list-divider">
+                    <div id="average-selection" class="hidden center">
+                        <div class="card-content">
+                            <div class="radio mdc-form-field">
+                                <div class="mdc-radio">
+                                    <input class="mdc-radio__native-control" type="radio" id="average-radio" name="average">
+                                    <div class="mdc-radio__background">
+                                        <div class="mdc-radio__outer-circle"></div>
+                                        <div class="mdc-radio__inner-circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="category-name input mdc-text-field mdc-text-field--outlined" id="average-name" data-mdc-auto-init="MDCTextField">
+                                <input class="mdc-text-field__input" type="text" id="average-name-input" onchange="">
+                                <label class="mdc-floating-label" for="average-name-input">Name</label>
+                                <div class="mdc-notched-outline">
+                                    <svg>
+                                        <path class="mdc-notched-outline__path"/>
+                                    </svg>
+                                </div>
+                                <div class="mdc-notched-outline__idle"></div>
+                            </div>
+                            <div class="trash">
+                                <i class="trash-icon mdc-icon-toggle material-icons" id="average-delete" role="button" aria-pressed="false" data-mdc-auto-init="MDCIconToggle"
+                                   data-toggle-on='{"label": "Trash", "content": "delete"}'
+                                   data-toggle-off='{"label": "Trash", "content": "delete"}'>
+                                </i>
+                            </div>
+                        </div>
+                        <hr class="mdc-list-divider">
+                    </div>
+                    <div id="average-list-container">
+                    </div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent" id="ga-average-display-card">
                     <div class="card-content  mdc-typography--headline4">Grade Average</div>
                     <hr class="mdc-list-divider">
                     <div class="card-display">
                         <h1 class="display mdc-typography--headline3" id="average">0%</h1>
+                        <div id="category-grades">
+                            <h1 class="display mdc-typography--headline4 hidden" id="category-grade"></h1>
+                        </div>
                     </div>
                     <hr class="mdc-list-divider">
                     <div class="card-settings">
-                        <div class="mdc-form-field">
-                            <div class="mdc-checkbox">
-                                <input type="checkbox" class="mdc-checkbox__native-control" id="decimal" onchange="updateGrade()"/>
-                                <div class="mdc-checkbox__background">
-                                    <svg class="mdc-checkbox__checkmark"
-                                         viewBox="0 0 24 24">
-                                        <path class="mdc-checkbox__checkmark-path"
-                                              fill="none"
-                                              stroke="white"
-                                              d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                    </svg>
-                                    <div class="mdc-checkbox__mixedmark"></div>
+                        <div class="switch mdc-form-field">
+                            <div class="mdc-switch">
+                                <input type="checkbox" id="decimal" class="mdc-switch__native-control" role="switch" onchange="updateGrade()">
+                                <div class="mdc-switch__background">
+                                    <div class="mdc-switch__knob"></div>
                                 </div>
                             </div>
                             <label for="decimal">Decimal</label>
                         </div>
                     </div>
                 </div>
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 mdc-card card-parent" id="category-manager-card">
+                    <div class="card-content mdc-typography--headline4 card-fab" onclick="addCategory()">
+                        Categories
+                        <button class="mdc-fab class-add" data-mdc-auto-init="MDCRipple">
+                      <span class="mdc-fab__icon material-icons" aria-label="add">
+                        add
+                      </span>
+                        </button>
+                    </div>
+                    <hr class="mdc-list-divider">
+                    <div id="category-list-container">
+                        <div id="category" class="hidden">
+                            <div class="card-category-list">
+                                <div class="category-name input mdc-text-field mdc-text-field--outlined" id="category-name" data-mdc-auto-init="MDCTextField">
+                                    <input class="mdc-text-field__input" type="text" id="category-name-input" onchange="">
+                                    <label class="mdc-floating-label" for="category-name-input">Name</label>
+                                    <div class="mdc-notched-outline">
+                                        <svg>
+                                            <path class="mdc-notched-outline__path"/>
+                                        </svg>
+                                    </div>
+                                    <div class="mdc-notched-outline__idle"></div>
+                                </div>
+                                <div class="number input mdc-text-field mdc-text-field--outlined" id="category-weight" data-mdc-auto-init="MDCTextField">
+                                    <input class="mdc-text-field__input" type="text" id="category-weight-input">
+                                    <label class="mdc-floating-label" for="category-weight-input">Weight</label>
+                                    <div class="mdc-notched-outline">
+                                        <svg>
+                                            <path class="mdc-notched-outline__path"/>
+                                        </svg>
+                                    </div>
+                                    <div class="mdc-notched-outline__idle"></div>
+                                </div>
+                                <div class="category-slider center mdc-slider mdc-slider--discrete" id="category-slider" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-step="5" aria-label="Select Value" data-mdc-auto-init="MDCSlider">
+                                    <div class="mdc-slider__track-container">
+                                        <div class="mdc-slider__track"></div>
+                                    </div>
+                                    <div class="category-slider-dot mdc-slider__thumb-container">
+                                        <div class="mdc-slider__pin">
+                                            <span class="mdc-slider__pin-value-marker"></span>
+                                        </div>
+                                        <svg class="mdc-slider__thumb" width="21" height="21">
+                                            <circle cx="10.5" cy="10.5" r="7.875"></circle>
+                                        </svg>
+                                        <div class="mdc-slider__focus-ring"></div>
+                                    </div>
+                                </div>
+                                <div class="trash">
+                                    <i class="mdc-icon-toggle material-icons" id="category-delete" role="button" aria-pressed="false" data-mdc-auto-init="MDCIconToggle"
+                                       data-toggle-on='{"label": "Trash", "content": "delete"}'
+                                       data-toggle-off='{"label": "Trash", "content": "delete"}'>
+                                    </i>
+                                </div>
+                            </div>
+                            <hr class="mdc-list-divider">
+                        </div>
+                    </div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 mdc-card card-parent" id="ga-add-grades-card">
                     <div class="card-content mdc-typography--headline4">Add Grades</div>
                     <hr class="mdc-list-divider">
-                    <div class="card-content">
+                    <div class="card-content card-fab">
                         <div>
-                            <div class="mdc-text-field input" data-mdc-auto-init="MDCTextField">
+                            <div class="mdc-text-field mdc-text-field--outlined no-top input" data-mdc-auto-init="MDCTextField">
                                 <input class="mdc-text-field__input" type="text" id="grade" onkeypress="handle(event)">
                                 <label class="mdc-floating-label" for="grade">Grade</label>
-                                <div class="mdc-line-ripple"></div>
+                                <div class="mdc-notched-outline">
+                                    <svg>
+                                        <path class="mdc-notched-outline__path"/>
+                                    </svg>
+                                </div>
+                                <div class="mdc-notched-outline__idle"></div>
                             </div>
                             <button class="mdc-button mdc-button--raised button-secondary-color" id="addButton" data-mdc-auto-init="MDCRipple" onclick="checkInput()">
                                 Add
                             </button>
                         </div>
                     </div>
+                    <div id="category-chips-card">
+                        <hr class="mdc-list-divider">
+                        <div class="card-chip">
+                            <div class="center mdc-chip-set mdc-chip-set--choice" id="category-selector-chips" data-mdc-auto-init="MDCChipSet"></div>
+                        </div>
+                    </div>
                     <hr class="mdc-list-divider">
                     <div class="card-settings">
-                        <div class="mdc-form-field">
-                            <div class="mdc-checkbox">
-                                <input type="checkbox" class="mdc-checkbox__native-control" id="autoclear" checked/>
-                                <div class="mdc-checkbox__background">
-                                    <svg class="mdc-checkbox__checkmark"
-                                         viewBox="0 0 24 24">
-                                        <path class="mdc-checkbox__checkmark-path"
-                                              fill="none"
-                                              stroke="white"
-                                              d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                    </svg>
-                                    <div class="mdc-checkbox__mixedmark"></div>
+                        <div class="switch mdc-form-field">
+                            <div class="mdc-switch">
+                                <input type="checkbox" id="autoclear" class="mdc-switch__native-control" role="switch" checked>
+                                <div class="mdc-switch__background">
+                                    <div class="mdc-switch__knob"></div>
                                 </div>
                             </div>
                             <label for="autoclear">Auto Clear</label>
                         </div>
-                    </div>
-                </div>
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-card card-parent">
-                    <div class="card-content mdc-typography--headline4">Grades</div>
-                    <hr class="mdc-list-divider">
-                    <div class="card-content">
-                        <div class="hidden">
-                            <i class="input-trailing-icon material-icons mdc-chip__icon mdc-chip__icon--trailing" id="deletechip" tabindex="0" role="button">cancel</i>
-                        </div>
-                        <div class="center mdc-chip-set" id="chips" data-mdc-auto-init="MDCChipSet">No grades entered</div>
-                    </div>
-                    <hr class="mdc-list-divider">
-                    <div class="card-settings">
-                        <div class="mdc-form-field">
-                            <div class="mdc-checkbox">
-                                <input type="checkbox" class="mdc-checkbox__native-control" id="weight" onchange="updateChips()"/>
-                                <div class="mdc-checkbox__background">
-                                    <svg class="mdc-checkbox__checkmark"
-                                         viewBox="0 0 24 24">
-                                        <path class="mdc-checkbox__checkmark-path"
-                                              fill="none"
-                                              stroke="white"
-                                              d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                    </svg>
-                                    <div class="mdc-checkbox__mixedmark"></div>
+                        <div class="switch mdc-form-field">
+                            <div class="mdc-switch">
+                                <input type="checkbox" id="weight" class="mdc-switch__native-control" role="switch" onchange="reloadAllGrades()">
+                                <div class="mdc-switch__background">
+                                    <div class="mdc-switch__knob"></div>
                                 </div>
                             </div>
                             <label for="weight">Show Weight</label>
                         </div>
                     </div>
                 </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent hidden" id="category-card">
+                    <div class="card-content mdc-typography--headline4" id="category-title">Grades</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-content">
+                        <div class="hidden">
+                            <i class="input-trailing-icon material-icons mdc-chip__icon mdc-chip__icon--trailing" id="delete-chip" tabindex="0" role="button">cancel</i>
+                        </div>
+                        <div class="center mdc-chip-set" id="category-chips" data-mdc-auto-init="MDCChipSet">No grades entered</div>
+                    </div>
+                    <hr class="mdc-list-divider">
+                    <div class="center card-button">
+                        <button class="mdc-button mdc-button--dense mdc-ripple-surface mdc-ripple-surface--accent lowered-button-secondary-color" id="category-clear" data-mdc-auto-init="MDCRipple">
+                            Clear
+                        </button>
+                    </div>
+                </div>
             </div>
         </section>
         <section class="mdc-layout-grid">
-            <div class="mdc-layout-grid__inner">
+            <div class="mdc-layout-grid__inner layout-grid">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
+                    <div class="card-content  mdc-typography--headline4">GPA Calculator</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-content">
+                        Use the GPA calculator to determine your overall grade point average. Add classes and input your overall grade and add quality points if it a Pre-AP, AP, or Honors course.
+                    </div>
+                </div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
                     <div class="card-content mdc-typography--headline4">GPA</div>
                     <hr class="mdc-list-divider">
@@ -144,7 +264,7 @@
                         <h1 class="display mdc-typography--headline3" id="gpa">0%</h1>
                     </div>
                 </div>
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-9 mdc-card card-parent">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-card card-parent">
                     <div class="card-content mdc-typography--headline4 card-fab" onclick="addClass()">
                         Classes
                         <button class="mdc-fab class-add" data-mdc-auto-init="MDCRipple">
@@ -154,30 +274,140 @@
                         </button>
                     </div>
                     <hr class="mdc-list-divider">
+                    <div class="center card-content hidden" id="no-class">No classes added</div>
                     <div id="class" class="hidden">
-                        <div class="class-name mdc-text-field input" data-mdc-auto-init="MDCTextField">
-                            <input class="mdc-text-field__input" type="text" id="classname" onchange="updateClassData(this.id.substring(9))">
-                            <label class="mdc-floating-label" for="classname">Class Name</label>
-                            <div class="mdc-line-ripple"></div>
+                        <div class="center card-content">
+                            <div class="class-name input mdc-text-field mdc-text-field--outlined" data-mdc-auto-init="MDCTextField">
+                                <input class="mdc-text-field__input" type="text" id="classname" onchange="updateClassData(this.id.substring(9))">
+                                <label class="mdc-floating-label" for="classname">Class Name</label>
+                                <div class="mdc-notched-outline">
+                                    <svg>
+                                        <path class="mdc-notched-outline__path"/>
+                                    </svg>
+                                </div>
+                                <div class="mdc-notched-outline__idle"></div>
+                            </div>
+                            <div class="number input mdc-text-field mdc-text-field--outlined" data-mdc-auto-init="MDCTextField">
+                                <input class="mdc-text-field__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classgrade" oninput="updateClassData(this.id.substring(10))">
+                                <label class="mdc-floating-label" for="classgrade">Grade</label>
+                                <div class="mdc-notched-outline">
+                                    <svg>
+                                        <path class="mdc-notched-outline__path"/>
+                                    </svg>
+                                </div>
+                                <div class="mdc-notched-outline__idle"></div>
+                            </div>
+                            <div class="number input mdc-text-field mdc-text-field--outlined" data-mdc-auto-init="MDCTextField">
+                                <input class="mdc-text-field__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classqp" oninput="updateClassData(this.id.substring(7))">
+                                <label class="mdc-floating-label" for="classqp">QP</label>                             <div class="mdc-notched-outline">
+                                <svg>
+                                    <path class="mdc-notched-outline__path"/>
+                                </svg>
+                            </div>
+                                <div class="mdc-notched-outline__idle"></div></div>
+                            <div class="trash">
+                                <i class="trash-icon mdc-icon-toggle material-icons" id="classdelete" role="button" aria-pressed="false" data-mdc-auto-init="MDCIconToggle"
+                                   data-toggle-on='{"label": "Trash", "content": "delete"}'
+                                   data-toggle-off='{"label": "Trash", "content": "delete"}'>
+                                </i>
+                            </div>
                         </div>
-                        <div class="number mdc-text-field input" data-mdc-auto-init="MDCTextField">
-                            <input class="mdc-text-field__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classgrade" oninput="updateClassData(this.id.substring(10))">
-                            <label class="mdc-floating-label" for="classgrade">Grade</label>
-                            <div class="mdc-line-ripple"></div>
+                        <hr class="mdc-list-divider">
+                    </div>
+                    <div id="classes">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner layout-grid">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
+                    <div class="card-content  mdc-typography--headline4">Final Grade Calculator</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-content">
+                        Use the Final Grade Calculator to determine your final grade in your class. Enter the grades your received for each quarter, and the grade you received for your semester exams. Use the up and down arrow to easily change your grade to determine what you might need to make to achieve a certain grade.
+                    </div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
+                    <div class="card-content  mdc-typography--headline4">Final Grade</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-display">
+                        <h1 class="display mdc-typography--headline3" id="final-grade">0%</h1>
+                        <h1 class="display mdc-typography--headline4" id="semester1-grade">Semester 1: 0%</h1>
+                        <h1 class="display mdc-typography--headline4" id="semester2-grade">Semester 2: 0%</h1>
+                    </div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
+                    <div class="card-content  mdc-typography--headline4">1st Semester</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-content">
+                        <div class="mdc-text-field mdc-text-field--outlined no-top input" id="quarter1" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" id="quarter1Input" oninput="updateFinalGrade()" onkeydown="checkArrowKeys(event,this.id)">
+                            <label class="mdc-floating-label" for="quarter1Input">Quarter 1</label>
+                            <div class="mdc-notched-outline">
+                                <svg>
+                                    <path class="mdc-notched-outline__path"/>
+                                </svg>
+                            </div>
+                            <div class="mdc-notched-outline__idle"></div>
                         </div>
-                        <div class="number mdc-text-field input" data-mdc-auto-init="MDCTextField">
-                            <input class="mdc-text-field__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classqp" oninput="updateClassData(this.id.substring(7))">
-                            <label class="mdc-floating-label" for="classqp">QP</label>
-                            <div class="mdc-line-ripple"></div>
+                        <div class="mdc-text-field mdc-text-field--outlined no-top input" id="quarter2" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" id="quarter2Input" oninput="updateFinalGrade()" onkeydown="checkArrowKeys(event,this.id)">
+                            <label class="mdc-floating-label" for="quarter2Input">Quarter 2</label>
+                            <div class="mdc-notched-outline">
+                                <svg>
+                                    <path class="mdc-notched-outline__path"/>
+                                </svg>
+                            </div>
+                            <div class="mdc-notched-outline__idle"></div>
                         </div>
-                        <div class="trash">
-                            <i class="mdc-icon-toggle material-icons" id="classdelete" role="button" aria-pressed="false" data-mdc-auto-init="MDCIconToggle"
-                               data-toggle-on='{"label": "Remove from favorites", "content": "delete"}'
-                               data-toggle-off='{"label": "Add to favorites", "content": "delete"}'>
-                            </i>
+                        <div class="mdc-text-field mdc-text-field--outlined no-top input" id="semester1-exam" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" id="semester1-examInput" oninput="updateFinalGrade()" onkeydown="checkArrowKeys(event,this.id)">
+                            <label class="mdc-floating-label" for="semester1-examInput">Semester 1 Exam</label>
+                            <div class="mdc-notched-outline">
+                                <svg>
+                                    <path class="mdc-notched-outline__path"/>
+                                </svg>
+                            </div>
+                            <div class="mdc-notched-outline__idle"></div>
                         </div>
                     </div>
-                    <div id="classes" class="center card-content">No classes added</div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-card card-parent">
+                    <div class="card-content  mdc-typography--headline4">2nd Semester</div>
+                    <hr class="mdc-list-divider">
+                    <div class="card-content">
+                        <div class="mdc-text-field mdc-text-field--outlined no-top input" id="quarter3" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" id="quarter3Input" oninput="updateFinalGrade()" onkeydown="checkArrowKeys(event,this.id)">
+                            <label class="mdc-floating-label" for="quarter3Input">Quarter 3</label>
+                            <div class="mdc-notched-outline">
+                                <svg>
+                                    <path class="mdc-notched-outline__path"/>
+                                </svg>
+                            </div>
+                            <div class="mdc-notched-outline__idle"></div>
+                        </div>
+                        <div class="mdc-text-field mdc-text-field--outlined no-top input" id="quarter4" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" id="quarter4Input" oninput="updateFinalGrade()" onkeydown="checkArrowKeys(event,this.id)">
+                            <label class="mdc-floating-label" for="quarter4Input">Quarter 4</label>
+                            <div class="mdc-notched-outline">
+                                <svg>
+                                    <path class="mdc-notched-outline__path"/>
+                                </svg>
+                            </div>
+                            <div class="mdc-notched-outline__idle"></div>
+                        </div>
+                        <div class="mdc-text-field mdc-text-field--outlined no-top input" id="semester2-exam" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" id="semester2-examInput" oninput="updateFinalGrade()" onkeydown="checkArrowKeys(event,this.id)">
+                            <label class="mdc-floating-label" for="semester2-examInput">Semester 2 Exam</label>
+                            <div class="mdc-notched-outline">
+                                <svg>
+                                    <path class="mdc-notched-outline__path"/>
+                                </svg>
+                            </div>
+                            <div class="mdc-notched-outline__idle"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -185,10 +415,48 @@
 </div>
 </svg>
 </svg>
+    <div class="ad">
+        <script type="text/javascript">
+            ( function() {
+                if (window.CHITIKA === undefined) { window.CHITIKA = { 'units' : [] }; };
+                var unit = {"calltype":"async[2]","publisher":"coleweinman1","width":550,"height":250,"sid":"Chitika Default"};
+                var placement_id = window.CHITIKA.units.length;
+                window.CHITIKA.units.push(unit);
+                document.write('<div id="chitikaAdBlock-' + placement_id + '"></div>');
+            }());
+        </script>
+        <script type="text/javascript" src="//cdn.chitika.net/getads.js" async></script>
+        <script type="text/javascript">
+            ( function() {
+                if (window.CHITIKA === undefined) { window.CHITIKA = { 'units' : [] }; };
+                var unit = {"calltype":"async[2]","publisher":"coleweinman1","width":550,"height":250,"sid":"Chitika Default"};
+                var placement_id = window.CHITIKA.units.length;
+                window.CHITIKA.units.push(unit);
+                document.write('<div id="chitikaAdBlock-' + placement_id + '"></div>');
+            }());
+        </script>
+        <script type="text/javascript" src="//cdn.chitika.net/getads.js" async></script>
+        <script type="text/javascript">
+            ( function() {
+                if (window.CHITIKA === undefined) { window.CHITIKA = { 'units' : [] }; };
+                var unit = {"calltype":"async[2]","publisher":"coleweinman1","width":550,"height":250,"sid":"Chitika Default"};
+                var placement_id = window.CHITIKA.units.length;
+                window.CHITIKA.units.push(unit);
+                document.write('<div id="chitikaAdBlock-' + placement_id + '"></div>');
+            }());
+        </script>
+        <script type="text/javascript" src="//cdn.chitika.net/getads.js" async></script>
+    </div>
+    <div class="footer hidden">
+        Created by Cole Weinman
+    </div>
 </body>
-<script id="material" src="https://unpkg.com/material-components-web@latest/dist/material-components-web.js"></script>
+<script id="material" src="https://unpkg.com/material-components-web@0.35.2/dist/material-components-web.js"></script>
+<script type="text/javascript" src="login.js"></script>
+<script type="text/javascript" src="firestore.js"></script>
 <script type="text/javascript" src="average.js"></script>
 <script type="text/javascript" src="gpa.js"></script>
-<script type="text/javascript" src="login.js"></script>
 <script type="text/javascript" src="theme.js"></script>
+<script type="text/javascript" src="category.js"></script>
+<script type="text/javascript" src="finalgrade.js"></script>
 </html>
