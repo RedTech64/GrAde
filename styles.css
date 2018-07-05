@@ -175,7 +175,10 @@ html, body {
 }
 
 .ad {
-    display: -webkit-box;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .footer {
