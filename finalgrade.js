@@ -1,15 +1,22 @@
 finalgrade = [];
 
 function initializeFinalGrade(data) {
+    if(data.finalgrade == null) {
+        finalgrade = ['','','','','',''];
+        uploadFGDataToFB();
+    }
+    var oldFG = finalgrade;
     finalgrade = data.finalgrade;
-    document.getElementById('quarter1').MDCTextField.value = finalgrade[0];
-    document.getElementById('quarter2').MDCTextField.value = finalgrade[1];
-    document.getElementById('semester1-exam').MDCTextField.value = finalgrade[2];
-    document.getElementById('quarter3').MDCTextField.value = finalgrade[3];
-    document.getElementById('quarter4').MDCTextField.value = finalgrade[4];
-    document.getElementById('semester2-exam').MDCTextField.value = finalgrade[5];
-    window.mdc.autoInit(document, () => {});
-    updateFinalGrade();
+    if(JSON.stringify(oldClasses) != JSON.stringify(classes)) {
+        document.getElementById('quarter1').MDCTextField.value = finalgrade[0];
+        document.getElementById('quarter2').MDCTextField.value = finalgrade[1];
+        document.getElementById('semester1-exam').MDCTextField.value = finalgrade[2];
+        document.getElementById('quarter3').MDCTextField.value = finalgrade[3];
+        document.getElementById('quarter4').MDCTextField.value = finalgrade[4];
+        document.getElementById('semester2-exam').MDCTextField.value = finalgrade[5];
+        window.mdc.autoInit(document, () => {});
+        updateFinalGrade();
+    }
 }
 
 function checkArrowKeys(e,id) {

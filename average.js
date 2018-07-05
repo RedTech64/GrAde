@@ -13,37 +13,40 @@ function initializeAverage(data) {
     average = data.average;
     selected = data.averageSelected;
     oldData = data.categories;
-    if (average == null) {
+    if(average == null) {
         average = [];
     }
-    if (selected == null) {
+    if(selected == null) {
         selected = 0;
     }
-    if (oldData != null) {
+    if(oldData != null) {
         average[0] = new Average('Average 1', 0, oldData);
     }
-    if (average.length == 0) {
+    if(average.length == 0) {
         average[0] = new Average('Average 1', 0, [new Category('Category 1', [], 100, 100)]);
+    }
+    if(average[0].categories.length == 0) {
+        average[0].categories[0] = new Category('Category 1',[],100,100);
     }
     if(!initialized) {
         updateAverages();
         loadAverage(selected);
         initialized = true;
+        uploadAverageData();
     } else {
-        console.log(oldAverage);
-        console.log(average);
         if(JSON.stringify(oldAverage[selected].categories) != JSON.stringify(average[selected].categories)) {
-            console.log('category');
+            console.log('New Data: Updating: categories');
             categoryData = average[selected].categories;
             updateCategories();
         } else if(JSON.stringify(oldAverage[selected]) != JSON.stringify(average[selected])) {
-            console.log('average');
+            console.log('New Data: Updating: averages');
+            updateAverages();
             loadAverage(selected);
         } else if(oldSelected != selected) {
             updateAverages();
             loadAverage(selected);
         } else {
-            console.log('no change');
+            console.log('New Data: Updating: nothing');
         }
     }
 }
@@ -53,7 +56,6 @@ function loadAverage(index) {
     categoryData = average[index].categories;
     updateCategories();
     updateGrade();
-    //uploadAverageData();
 }
 
 function handle(e) {

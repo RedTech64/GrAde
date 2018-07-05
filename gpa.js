@@ -1,9 +1,16 @@
 var classes = [];
 
 function initializeGPA(data) {
+    if(data.classes == null) {
+        classes = [];
+        uploadClassesToFB();
+    }
+    var oldClasses = classes;
     classes = data.classes;
-    updateClasses();
-    calculateGPA();
+    if(JSON.stringify(oldClasses) != JSON.stringify(classes)) {
+        updateClasses();
+        calculateGPA();
+    }
 }
 
 function addClass() {
