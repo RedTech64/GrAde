@@ -9,7 +9,6 @@ var oldData = [];
 function initializeAverage(data) {
     var oldAverage = average;
     var oldSelected = selected;
-    console.log(data);
     average = data.average;
     selected = data.averageSelected;
     oldData = data.categories;
@@ -347,7 +346,6 @@ function reloadAllGrades() {
 }
 
 function uploadAverageData() {3
-    console.log('UPLOAD');
     if(categoryData == null) {
         categoryData = [];
     }

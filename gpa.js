@@ -10,11 +10,13 @@ function initializeGPA(data) {
     if(JSON.stringify(oldClasses) != JSON.stringify(classes)) {
         updateClasses();
         calculateGPA();
+    } else if(classes.length == 0 && oldClasses.length == 0) {
+        updateClasses();
     }
 }
 
 function addClass() {
-    var newClass = new Class("","","");
+    var newClass = new Class("",null,null);
     classes[classes.length] = newClass;
     updateClasses();
     uploadClassesToFB();
@@ -57,14 +59,34 @@ function updateClasses() {
         document.getElementById('classes').appendChild(no);
     }
     for(var i = 0; i < classes.length; i++) {
-        new ClassElement(classes[i],i);
+        var grade;
+        var qp;
+        if(classes[i].grade == null) {
+            grade = "";
+        } else {
+            grade = classes[i].grade.toString()
+        }
+        if(classes[i].qp == null) {
+            qp = "";
+        } else {
+            qp = classes[i].qp.toString()
+        }
+        new ClassElement(new Class(classes[i].name,grade,qp),i);
     }
 }
 
 function updateClassData(id) {
     classes[id].name = document.getElementById("classname"+id).value;
-    classes[id].grade = document.getElementById("classgrade"+id).value;
-    classes[id].qp = document.getElementById("classqp"+id).value;
+    if(isNaN(document.getElementById("classgrade"+id).value) || document.getElementById("classgrade"+id).value == "") {
+        classes[id].grade = null;
+    } else {
+        classes[id].grade = parseInt(document.getElementById("classgrade"+id).value);
+    }
+    if(isNaN(document.getElementById("classqp"+id).value) || document.getElementById("classqp"+id).value == "") {
+        classes[id].qp = classes[id].qp = null;
+    } else {
+        classes[id].qp = parseInt(document.getElementById("classqp"+id).value);
+    }
     calculateGPA();
     uploadClassesToFB();
 }
@@ -76,13 +98,13 @@ function calculateGPA() {
     var count = 0;
     for(var i = 0; i < classes.length; i++) {
         if(classes[i].grade != "") {
-            grade = parseInt(document.getElementById("classgrade"+i).value);
+            grade = classes[i].grade;
             count++;
         } else {
             grade = 0;
         }
         if(classes[i].qp != "") {
-            qp = parseInt(document.getElementById("classqp"+i).value);
+            qp = classes[i].qp;
         } else {
             qp = 0;
         }
@@ -104,9 +126,10 @@ function calculateGPA() {
 
 function deleteClass(id) {
     classes.splice(id,1);
-    uploadClassesToFB();
+    calculateGPA();
     updateClasses();
-    
+    uploadClassesToFB();
+
 }
 
 function uploadClassesToFB() {
