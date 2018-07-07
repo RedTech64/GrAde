@@ -7,7 +7,7 @@ function initializeFinalGrade(data) {
     }
     var oldFG = finalgrade;
     finalgrade = data.finalgrade;
-    if(JSON.stringify(oldClasses) != JSON.stringify(classes)) {
+    if(JSON.stringify(oldFG) != JSON.stringify(finalgrade)) {
         document.getElementById('quarter1').MDCTextField.value = finalgrade[0];
         document.getElementById('quarter2').MDCTextField.value = finalgrade[1];
         document.getElementById('semester1-exam').MDCTextField.value = finalgrade[2];
