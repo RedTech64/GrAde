@@ -2,7 +2,7 @@ finalgrade = [];
 
 function initializeFinalGrade(data) {
     if(data.finalgrade == null) {
-        finalgrade = ['','','','','',''];
+        data.finalgrade = ['','','','','',''];
         uploadFGDataToFB();
     }
     var oldFG = finalgrade;
@@ -21,7 +21,6 @@ function initializeFinalGrade(data) {
 
 function checkArrowKeys(e,id) {
     if(e.keyCode == 38 && !isNaN(document.getElementById(id).value) && document.getElementById(id).value != ''){
-        console.log(id);
         e.preventDefault();
         document.getElementById(id).value = parseInt(document.getElementById(id).value)+1;
         updateFinalGrade();

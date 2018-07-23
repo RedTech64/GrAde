@@ -10,7 +10,11 @@ function initializeAverage(data) {
     var oldAverage = average;
     var oldSelected = selected;
     average = data.average;
-    selected = data.averageSelected;
+    for(var i = 0; i < average.length; i++) {
+        if(average[i].id == data.selectedAverage) {
+            selected = i;
+        }
+    };
     oldData = data.categories;
     if(average == null) {
         average = [];
@@ -47,6 +51,7 @@ function initializeAverage(data) {
         } else {
             console.log('New Data: Updating: nothing');
         }
+        updateGrade();
     }
 }
 
@@ -118,6 +123,7 @@ function AverageElement(name,index) {
       if(index != selected) {
           loadAverage(index);
           selected = index;
+          uploadAverageData();
       }
     };
     document.getElementById('average-delete'+index).onclick = function() {
@@ -345,16 +351,47 @@ function reloadAllGrades() {
     }
 }
 
-function uploadAverageData() {3
+function uploadAverageData() {
     if(categoryData == null) {
         categoryData = [];
     }
     var db = firebase.firestore();
+    var ids = [];
+    average.forEach(function(a) {
+        ids.push(a.id);
+    });
+    db.collection("users").doc(getUser().uid).collection("averages").get().then(function(docs) {
+        docs.forEach(function (doc) {
+            if (!ids.includes(doc.id)) {
+                db.collection("users").doc(getUser().uid).collection("averages").doc(doc.id).delete();
+            }
+        });
+    });
     average[selected].categories = categoryData;
-    return db.collection("users").doc(getUser().uid).update({
-        average: average,
-        averageSelected: selected
-    }).then().catch(function(error) {
-        console.log(error);
+    average.forEach(function(average) {
+        if(average.id == null) {
+            db.collection("users").doc(getUser().uid).collection("averages").add({
+                name: average.name,
+                categories: average.categories,
+                selectedCategory: average.selectedCategory
+            }).then(function(ref) {
+                ref.get().then(function(doc) {
+                }).then(function() {
+                    ref.update({
+                        id: ref.id
+                    });
+                });
+            });
+        } else {
+            db.collection("users").doc(getUser().uid).collection("averages").doc(average.id).update({
+                id: average.id,
+                name: average.name,
+                categories: average.categories,
+                selectedCategory: average.selectedCategory
+            });
+        }
+    });
+    db.collection("users").doc(getUser().uid).update({
+        selectedAverage: average[selected].id
     });
 }

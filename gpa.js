@@ -134,9 +134,38 @@ function deleteClass(id) {
 
 function uploadClassesToFB() {
     var db = firebase.firestore();
-    return db.collection("users").doc(getUser().uid).update({
-        classes: classes
-    }).then().catch(function(error) {
-        console.log(error);
+    var ids = [];
+    classes.forEach(function(c) {
+        ids.push(c.id);
+    });
+    db.collection("users").doc(getUser().uid).collection("classes").get().then(function(docs) {
+        docs.forEach(function (doc) {
+            if (!ids.includes(doc.id)) {
+                db.collection("users").doc(getUser().uid).collection("classes").doc(doc.id).delete();
+            }
+        });
+    });
+    classes.forEach(function(c) {
+        if(c.id == null) {
+            db.collection("users").doc(getUser().uid).collection("classes").add({
+                name: c.name,
+                grade: c.grade,
+                qp: c.qp
+            }).then(function(ref) {
+                ref.get().then(function(doc) {
+                }).then(function() {
+                    ref.update({
+                        id: ref.id
+                    });
+                });
+            });
+        } else {
+            db.collection("users").doc(getUser().uid).collection("classes").doc(c.id).update({
+                id: c.id,
+                name: c.name,
+                grade: c.grade,
+                qp: c.qp
+            });
+        }
     });
 }

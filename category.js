@@ -4,7 +4,6 @@ class CategoryElement {
         this.name = Category.name;
         this.grades = Category.grades;
         this.weight = Category.weight;
-        this.max = Category.max;
         this.index = index;
 
         this.average = 0;
@@ -66,9 +65,14 @@ class CategoryElement {
         this.weightFieldInput = document.getElementById('category-weight-input'+this.index);
         this.weightFieldInput.oninput = function() {
             var index = parseInt(this.getAttribute('id').substring(21));
-            updateWeight(this.value,index);
+            var value = this.value;
+            if(isNaN(parseInt(value))) {
+                value = 0;
+            }
+            updateWeight(value,index);
         };
         this.slider = new mdc.slider.MDCSlider(document.getElementById('category-slider'+this.index));
+        console.log(this.slider);
         document.getElementById('category-slider'+this.index).addEventListener('MDCSlider:change',function() {
             var index = parseInt(this.getAttribute('id').substring(15));
             var category = categoryElements[index];
@@ -80,13 +84,8 @@ class CategoryElement {
             removeCategory(this.id.substring(15));
         };
         this.setWeight(this.weight);
-        this.setMax(this.max);
         this.updateGradeDisplay();
         this.setName(this.name);
-    }
-
-    setIndex(index) {
-        this.index = index;
     }
 
     setName(name) {
@@ -97,13 +96,9 @@ class CategoryElement {
     }
 
     setWeight(weight) {
-        this.slider.value = weight;
-        this.weightField.value = weight;
+        this.slider.value = parseInt(weight);
+        this.weightField.value = parseInt(weight);
         syncWeight();
-    }
-
-    setMax(max) {
-        this.slider.max = max;
     }
 
     setGrade(grade) {
@@ -113,10 +108,6 @@ class CategoryElement {
 
     getWeight() {
         return this.slider.value;
-    }
-
-    getMax() {
-        return this.slider.max;
     }
 
     getName() {
