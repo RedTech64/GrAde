@@ -45,6 +45,7 @@ function setupClasses() {
                 name: doc.data().name,
                 grade: doc.data().grade,
                 qp: doc.data().qp,
+                linkID: doc.data().linkID,
             });
         });
         initializeGPA(data);

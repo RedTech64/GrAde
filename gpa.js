@@ -71,6 +71,41 @@ function updateClasses() {
         } else {
             qp = classes[i].qp.toString()
         }
+        if(classes[i].linkID != "") {
+            link = true;
+            console.log("RUN");
+            console.log(average);
+            for(var j = 0; j < average.length; j++) {
+                if(average[j].id == classes[i].linkID) {
+                    for (var k = 0; k < average[j].categories.length; k++) {
+                        var top = 0;
+                        var bottom = 0;
+                        var chips = average[j].categories[k].grades;
+                        console.log(average[j]);
+                        for (var l = 0; l < chips.length; l++) {
+                            top += parseInt(chips[l].grade);
+                            bottom += parseInt(chips[l].weight);
+                        }
+                        var sum = (top / bottom) * 100;
+                        if (isNaN(sum)) {
+                            sum = 0;
+                        }
+                        if (document.getElementById("decimal").checked) {
+                            sum = sum.toFixed(2);
+                        } else {
+                            sum = sum.toFixed(0);
+                        }
+                        grade = sum * (average[j].categories[k].weight / 100);
+                        sum = 0;
+                    }
+                    if (isNaN(grade)) {
+                        grade = 0;
+                    }
+                    classes[i].grade = grade;
+                    calculateGPA();
+                }
+            }
+        }
         new ClassElement(new Class(classes[i].name,grade,qp),i);
     }
 }
@@ -97,13 +132,13 @@ function calculateGPA() {
     var qp = 0;
     var count = 0;
     for(var i = 0; i < classes.length; i++) {
-        if(classes[i].grade != "") {
+        if(classes[i].grade != "" && classes[i].grade != null) {
             grade = classes[i].grade;
             count++;
         } else {
             grade = 0;
         }
-        if(classes[i].qp != "") {
+        if(classes[i].qp != "" && classes[i].grade != null) {
             qp = classes[i].qp;
         } else {
             qp = 0;

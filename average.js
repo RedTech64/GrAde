@@ -5,6 +5,7 @@ var averageElements = [];
 var selected;
 var initialized = false;
 var oldData = [];
+var link = false;
 
 function initializeAverage(data) {
     var oldAverage = average;
@@ -165,9 +166,6 @@ function updateCategories() {
 	if(categoryElements.length == 1) {
         categoryElements[0].hideTrash();
     }
-    if(categoryElements.length != 0) {
-        //categoryElements[0].select();
-    }
     document.getElementById('category-selector-chips').MDCChipSet.getDefaultFoundation().select(categoryElements[average[selected].selectedCategory].chip.getDefaultFoundation());
 }
 
@@ -267,6 +265,9 @@ function addGrade(Grade, index) {
     }
     updateGrade();
     uploadAverageData();
+    if(link) {
+        updateClasses();
+    }
 }
 
 function removeGrade(category,index) {
@@ -274,6 +275,9 @@ function removeGrade(category,index) {
     categoryElements[category].updateChips(categoryData[category].grades);
     updateGrade();
     uploadAverageData();
+    if(link) {
+        updateClasses();
+    }
 }
 
 function clearGrades(index) {
@@ -281,6 +285,9 @@ function clearGrades(index) {
     categoryElements[index].updateChips([]);
     updateGrade();
     uploadAverageData();
+    if(link) {
+        updateClasses();
+    }
 }
 
 function updateGrade() {

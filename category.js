@@ -72,7 +72,6 @@ class CategoryElement {
             updateWeight(value,index);
         };
         this.slider = new mdc.slider.MDCSlider(document.getElementById('category-slider'+this.index));
-        console.log(this.slider);
         document.getElementById('category-slider'+this.index).addEventListener('MDCSlider:change',function() {
             var index = parseInt(this.getAttribute('id').substring(15));
             var category = categoryElements[index];
