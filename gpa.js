@@ -185,7 +185,9 @@ function uploadClassesToFB() {
             db.collection("users").doc(getUser().uid).collection("classes").add({
                 name: c.name,
                 grade: c.grade,
-                qp: c.qp
+                qp: c.qp,
+                linkName: "",
+                linkID: ""
             }).then(function(ref) {
                 ref.get().then(function(doc) {
                 }).then(function() {
