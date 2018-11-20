@@ -299,7 +299,7 @@
                                 <div class="mdc-notched-outline__idle"></div>
                             </div>
                             <div class="number input mdc-text-field mdc-text-field--outlined" data-mdc-auto-init="MDCTextField">
-                                <input class="mdc-text-field__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classgrade" oninput="updateClassData(this.id.substring(10))">
+                                <input class="mdc-text-field__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="classgrade" oninput="updateClassData(this.id.substring(10))" onkeydown="checkAverageArrowKeys(event,this.id)">
                                 <label class="mdc-floating-label" for="classgrade">Grade</label>
                                 <div class="mdc-notched-outline">
                                     <svg>

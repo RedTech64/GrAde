@@ -15,6 +15,22 @@ function initializeGPA(data) {
     }
 }
 
+function checkAverageArrowKeys(e,id) {
+    console.log("arrow");
+    if(e.keyCode == 38 && !isNaN(document.getElementById(id).value) && document.getElementById(id).value != ''){
+        e.preventDefault();
+        document.getElementById(id).value = parseInt(document.getElementById(id).value)+1;
+        updateClassData(id.substring(10));
+        calculateGPA();
+    }
+    if(e.keyCode == 40 && !isNaN(document.getElementById(id).value) && document.getElementById(id).value != ''){
+        e.preventDefault();
+        document.getElementById(id).value = parseInt(document.getElementById(id).value)-1;
+        updateClassData(id.substring(10));
+        calculateGPA();
+    }
+}
+
 function addClass() {
     var newClass = new Class("",null,null);
     classes[classes.length] = newClass;
