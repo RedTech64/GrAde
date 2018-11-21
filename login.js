@@ -62,8 +62,6 @@ function setUpData() {
                 name: user.displayName,
                 email: user.email,
                 selectedAverage: 0,
-                average: [],
-                classes: [],
                 finalgrade: ['','','','','','']
             });
         }

@@ -8,6 +8,7 @@ var oldData = [];
 var link = false;
 
 function initializeAverage(data) {
+    console.log(data);
     var oldAverage = average;
     var oldSelected = selected;
     average = data.average;
@@ -17,20 +18,15 @@ function initializeAverage(data) {
         }
     };
     oldData = data.categories;
-    if(average == null) {
-        average = [];
-    }
-    if(selected == null) {
-        selected = 0;
-    }
     if(oldData != null) {
         average[0] = new Average('Average 1', 0, oldData);
     }
-    if(average.length == 0) {
-        average[0] = new Average('Average 1', 0, [new Category('Category 1', [], 100, 100)]);
-    }
-    if(average[0].categories.length == 0) {
-        average[0].categories[0] = new Category('Category 1',[],100,100);
+    if(average == null || average.length == 0) {
+        average = [];
+        average[0] = new Average('Average 1',0,[new Category('Category 1',[],100,100)]);
+        selected = 0;
+        updateAverages();
+        uploadAverageData();
     }
     if(!initialized) {
         updateAverages();
@@ -38,15 +34,16 @@ function initializeAverage(data) {
         initialized = true;
         uploadAverageData();
     } else {
-        if(JSON.stringify(oldAverage[selected].categories) != JSON.stringify(average[selected].categories)) {
+        if(oldSelected != selected) {
+            updateAverages();
+            loadAverage(selected);
+        } else if(JSON.stringify(oldAverage[selected].categories) != JSON.stringify(average[selected].categories)) {
             console.log('New Data: Updating: categories');
             categoryData = average[selected].categories;
             updateCategories();
+            updateAverages();
         } else if(JSON.stringify(oldAverage[selected]) != JSON.stringify(average[selected])) {
             console.log('New Data: Updating: averages');
-            updateAverages();
-            loadAverage(selected);
-        } else if(oldSelected != selected) {
             updateAverages();
             loadAverage(selected);
         } else {
