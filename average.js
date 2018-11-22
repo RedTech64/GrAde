@@ -8,7 +8,6 @@ var oldData = [];
 var link = false;
 
 function initializeAverage(data) {
-    console.log(data);
     var oldAverage = average;
     var oldSelected = selected;
     average = data.average;
@@ -114,6 +113,10 @@ function AverageElement(name,index) {
     document.getElementById('average-list-container').appendChild(averageElement);
     mdc.autoInit(averageElement);
     document.getElementById('average-name'+index).MDCTextField.value = name;
+    document.getElementById('average-name-input'+index).onchange = function() {
+        average[index].name = this.value;
+        uploadAverageData();
+    };
     document.getElementById('average-radio'+index).onclick = function() {
       var index = parseInt(this.id.substring(13));
       if(index != selected) {
@@ -147,6 +150,7 @@ function updateAverages() {
     for(var i = 0; i < average.length; i++) {
         averageElements[i] = new AverageElement(average[i].name,i);
     }
+    uploadAverageData();
 }
 
 function updateCategories() {
