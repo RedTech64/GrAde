@@ -25,8 +25,6 @@ function initializeAverage(data) {
         average = [];
         average[0] = new Average('Average 1',0,[new Category('Category 1',[],100,100)]);
         selected = 0;
-        updateAverages();
-        uploadAverageData();
     }
     if(!initialized) {
         updateAverages();
